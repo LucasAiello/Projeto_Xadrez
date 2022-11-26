@@ -1,7 +1,8 @@
+ERRO_SEM_PEÇA_LOCAL = "Não há peça da sua cor no local indicado.\n"
 PRETAS = "pretas"
 BRANCAS = "brancas"
 TAMANHO_TABULEIRO = 8
-MENSAGEM_TURNO = "          TURNO DAS {}"
+MSG_TURNO = "          TURNO DAS {}"
 ESPACO = u'\u2001'
 SEPARADOR_VAZIO = ''
 SEPARADOR_VERTICAL1 = '| '
@@ -95,16 +96,17 @@ def validar_movimento(p_atual, deslocamento):
     linha_atual = str(p_atual[0])
     linha_deslocamento = str(deslocamento[0])
 
-    if linha_atual.isdigit():
-        try:
-            if tabuleiro_cores[int(p_atual[0])-1][coluna_referencia.index(p_atual[1])-1] == turno:
-                if linha_deslocamento.isdigit():
-                    for i in range(len(coluna_referencia)):
-                        if deslocamento[1] == coluna_referencia[i]:
-                            return True
-
-        except IndexError:
-            return False
+    try:
+        if linha_atual.isdigit() and (int(linha_atual[0]) >= 1 and int(linha_atual[0]) <= 8):
+            for i in range(len(coluna_referencia)):
+                if p_atual[1] == coluna_referencia[i]:
+                    if tabuleiro_cores[int(p_atual[0])-1][coluna_referencia.index(p_atual[1])-1] == turno:
+                        if linha_deslocamento.isdigit() and (int(linha_deslocamento[0]) >= 1 and int(linha_deslocamento[0]) <= 8):
+                            for i in range(len(coluna_referencia)):
+                                if deslocamento[1] == coluna_referencia[i]:
+                                    return True
+    except:
+        return False
 
 
 turno = BRANCAS
@@ -118,10 +120,10 @@ criar_referencia_cor()
 
 while True:
     imprime_tabuleiro()
-    print(MENSAGEM_TURNO.format(turno.upper()))
+    print(MSG_TURNO.format(turno.upper()))
     posi_atual, posi_deslocamento = input().split()
     if validar_movimento(posi_atual, posi_deslocamento):
-        print("1")
+        pass
     else:
-        print("0")
+        print("Comando incorreto.")
     trocar_turno()
