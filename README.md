@@ -6,6 +6,8 @@
 - Função de desenhar o tabuleiro (8x8) (feito?)
 
 - Definir uma função para cada peça (o codigo de movimento e de captura)
+  - Lucas: Cavalo, Torre e Peão
+  - Hellen: Rainha, bispo e Rei
 
 - Definir uma função para xeque e outra pra xeque-mate
  
