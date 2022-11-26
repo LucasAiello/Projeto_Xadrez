@@ -1,6 +1,7 @@
 PRETAS = "pretas"
 BRANCAS = "brancas"
 TAMANHO_TABULEIRO = 8
+MENSAGEM_TURNO = "          TURNO DAS {}"
 ESPACO = u'\u2001'
 SEPARADOR_VAZIO = ''
 SEPARADOR_VERTICAL1 = '| '
@@ -23,6 +24,8 @@ PEAO_P = '\033[30m\u2659\033[m'
 
 def montando_tabuleiro():
     global tabuleiro
+    pecas_brancas = [TORRE_B, CAVALO_B, BISPO_B, RAINHA_B, REI_B, BISPO_B, CAVALO_B, TORRE_B]
+    pecas_pretas = [TORRE_P, CAVALO_P, BISPO_P, RAINHA_P, REI_P, BISPO_P, CAVALO_P, TORRE_P]
 
     for i in range(TAMANHO_TABULEIRO):
         tabuleiro.append([])
@@ -48,9 +51,9 @@ def criar_referencia_cor():
         linha = []
         for j in range(TAMANHO_TABULEIRO):
             if i == 0 or i == 1:
-                linha.append("p")
+                linha.append(PRETAS)
             elif i == 6 or i == 7:
-                linha.append("b")
+                linha.append(BRANCAS)
             else:
                 linha.append(SEPARADOR_VAZIO)
         tabuleiro_cores.append(linha)
@@ -58,23 +61,23 @@ def criar_referencia_cor():
 
 def imprime_tabuleiro():
     for i in range(TAMANHO_TABULEIRO):
-        if i ==0 :
+        if i == 0:
             for h in range(TAMANHO_TABULEIRO+1):
-                print(ESPACO,end=coluna[h])
+                print(ESPACO, end=coluna_tabuleiro[h])
             print()
-        print(' ',SEPARADOR_HORIZ)
+        print(' ', SEPARADOR_HORIZ)
         for j in range(TAMANHO_TABULEIRO):
 
             if j == TAMANHO_TABULEIRO-1:
-                print(SEPARADOR_VERTICAL+tabuleiro[i][j], end= SEPARADOR_VERTICAL0)
+                print(SEPARADOR_VERTICAL+tabuleiro[i][j], end=SEPARADOR_VERTICAL0)
             else:
-                if j==0:
-                    print(i+1, SEPARADOR_VERTICAL1, end=tabuleiro[i][j] )
+                if j == 0:
+                    print(i+1, SEPARADOR_VERTICAL1, end=tabuleiro[i][j])
                 else:
-                    print(SEPARADOR_VERTICAL, end=tabuleiro[i][j] )
+                    print(SEPARADOR_VERTICAL, end=tabuleiro[i][j])
         print()
         if i == TAMANHO_TABULEIRO-1:
-            print(' ',SEPARADOR_HORIZ)
+            print(' ', SEPARADOR_HORIZ)
 
 
 def trocar_turno():
@@ -85,16 +88,40 @@ def trocar_turno():
         turno = BRANCAS
 
 
-turno = BRANCAS
+def validar_movimento(p_atual, deslocamento):
+    global turno
+    global tabuleiro
+    global tabuleiro_cores
+    linha_atual = str(p_atual[0])
+    linha_deslocamento = str(deslocamento[0])
 
+    if linha_atual.isdigit():
+        try:
+            if tabuleiro_cores[int(p_atual[0])-1][coluna_referencia.index(p_atual[1])-1] == turno:
+                if linha_deslocamento.isdigit():
+                    for i in range(len(coluna_referencia)):
+                        if deslocamento[1] == coluna_referencia[i]:
+                            return True
+
+        except IndexError:
+            return False
+
+
+turno = BRANCAS
 tabuleiro = []
 tabuleiro_cores = []
-pecas_brancas = [TORRE_B, CAVALO_B, BISPO_B, RAINHA_B, REI_B, BISPO_B, CAVALO_B, TORRE_B]
-pecas_pretas = [TORRE_P, CAVALO_P, BISPO_P, RAINHA_P, REI_P, BISPO_P, CAVALO_P, TORRE_P]
-coluna = [' ', 'a ', ' b', '  c',  '  d', '  e', '  f ', ' g', '  h']
-
+coluna_tabuleiro = [' ', 'a ', ' b', '  c',  '  d', '  e', '  f ', ' g', '  h']
+coluna_referencia = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 
 montando_tabuleiro()
 criar_referencia_cor()
-imprime_tabuleiro()
-trocar_turno()
+
+while True:
+    imprime_tabuleiro()
+    print(MENSAGEM_TURNO.format(turno.upper()))
+    posi_atual, posi_deslocamento = input().split()
+    if validar_movimento(posi_atual, posi_deslocamento):
+        print("1")
+    else:
+        print("0")
+    trocar_turno()

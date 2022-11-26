@@ -8,7 +8,8 @@
 - Definir uma função para cada peça (o codigo de movimento e de captura)
   - Lucas: Cavalo, Torre e Peão
   - Hellen: Rainha, bispo e Rei
-
+- Função para validar jogadas
+- Função para "jogar"
 - Definir uma função para xeque e outra pra xeque-mate
  
 -----------------------------------------------------------------------------------
