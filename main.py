@@ -10,8 +10,8 @@ SEPARADOR_HORIZ = '_'*38
 RAINHA_B = '\u2655'
 REI_B = '\u2654'
 TORRE_B = '\u2656'
-BISPO_B = '\u2658'
-CAVALO_B = '\u2657'
+BISPO_B = '\u2657'
+CAVALO_B = '\u2658'
 PEAO_B = '\u2659'
 RAINHA_P = '\033[30m\u265b\033[m'
 REI_P = '\033[30m\u265a\033[m'
@@ -95,5 +95,6 @@ coluna = [' ', 'a ', ' b', '  c',  '  d', '  e', '  f ', ' g', '  h']
 
 
 montando_tabuleiro()
+criar_referencia_cor()
 imprime_tabuleiro()
 trocar_turno()
