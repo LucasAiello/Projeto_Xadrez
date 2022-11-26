@@ -7,10 +7,21 @@ SEPARADOR_VERTICAL1 = '| '
 SEPARADOR_VERTICAL = ' | '
 SEPARADOR_VERTICAL0 = ' |'
 SEPARADOR_HORIZ = '_'*38
+RAINHA_B = '\u2655'
+REI_B = '\u2654'
+TORRE_B = '\u2656'
+BISPO_B = '\u2658'
+CAVALO_B = '\u2657'
+PEAO_B = '\u2659'
+RAINHA_P = '\033[30m\u265b\033[m'
+REI_P = '\033[30m\u265a\033[m'
+TORRE_P = '\033[30m\u265c\033[m'
+BISPO_P = '\033[30m\u265d\033[m'
+CAVALO_P = '\033[30m\u265e\033[m'
+PEAO_P = '\033[30m\u2659\033[m'
 
 
 def montando_tabuleiro():
-    global tabuleiro_cores
     global tabuleiro
 
     for i in range(TAMANHO_TABULEIRO):
@@ -18,20 +29,21 @@ def montando_tabuleiro():
         for j in range(TAMANHO_TABULEIRO):
             if i <= 1 or i >= 6:
                 if i == 1:
-                    tabuleiro[i].append(pecas_pretas[-1])
+                    tabuleiro[i].append(PEAO_P)
                 elif i == 0:
                     for h in range(TAMANHO_TABULEIRO):
                         tabuleiro[i].append(pecas_pretas[h])
                 elif i == 6:
-                    tabuleiro[i].append("\u2659")
+                    tabuleiro[i].append(PEAO_B)
                 elif i == 7:
                     for h in range(TAMANHO_TABULEIRO):
                         tabuleiro[i].append(pecas_brancas[h])
             else:
                 tabuleiro[i].append(ESPACO)
 
-    # Matriz de cores para referencia
 
+def criar_referencia_cor():
+    global tabuleiro_cores
     for i in range(TAMANHO_TABULEIRO):
         linha = []
         for j in range(TAMANHO_TABULEIRO):
@@ -74,13 +86,11 @@ def trocar_turno():
 
 
 turno = BRANCAS
-pecas_brancas = ['\u2656', '\u2657', '\u2658', '\u2654', '\u2655', '\u2658', '\u2657', '\u2656']
-pecas_pretas = ['\033[30m\u265c\033[m',  '\033[30m\u265d\033[m', '\033[30m\u265e\033[m',
-             '\033[30m\u265a\033[m',  '\033[30m\u265b\033[m', '\033[30m\u265e\033[m',
-             '\033[30m\u265d\033[m', '\033[30m\u265c\033[m', '\033[30m\u2659\033[m']
 
 tabuleiro = []
 tabuleiro_cores = []
+pecas_brancas = [TORRE_B, CAVALO_B, BISPO_B, RAINHA_B, REI_B, BISPO_B, CAVALO_B, TORRE_B]
+pecas_pretas = [TORRE_P, CAVALO_P, BISPO_P, RAINHA_P, REI_P, BISPO_P, CAVALO_P, TORRE_P]
 coluna = [' ', 'a ', ' b', '  c',  '  d', '  e', '  f ', ' g', '  h']
 
 
