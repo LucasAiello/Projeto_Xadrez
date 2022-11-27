@@ -56,7 +56,7 @@ def criar_referencia_cor():
             elif i == 6 or i == 7:
                 linha.append(BRANCAS)
             else:
-                linha.append(SEPARADOR_VAZIO)
+                linha.append(ESPACO)
         tabuleiro_cores.append(linha)
 
 
@@ -89,26 +89,78 @@ def trocar_turno():
         turno = BRANCAS
 
 
-def validar_movimento(p_atual, deslocamento):
-    global turno
-    global tabuleiro
-    global tabuleiro_cores
-    linha_atual = str(p_atual[0])
-    linha_deslocamento = str(deslocamento[0])
+def validar_jogada(coordenada):
+    global posi_atual_p
+    global movimento_p
 
-    try:
-        if linha_atual.isdigit() and (int(linha_atual[0]) >= 1 and int(linha_atual[0]) <= 8):
-            for i in range(len(coluna_referencia)):
-                if p_atual[1] == coluna_referencia[i]:
-                    if tabuleiro_cores[int(p_atual[0])-1][coluna_referencia.index(p_atual[1])-1] == turno:
-                        if linha_deslocamento.isdigit() and (int(linha_deslocamento[0]) >= 1 and int(linha_deslocamento[0]) <= 8):
-                            for i in range(len(coluna_referencia)):
-                                if deslocamento[1] == coluna_referencia[i]:
-                                    return True
-    except:
+    if len(coordenada) == 5 and coordenada[2 == " "]:
+        posi_atual_p = coordenada[:2]
+        movimento_p = coordenada[3:]
+    elif len(coordenada) == 4:
+        posi_atual_p = coordenada[:2]
+        movimento_p = coordenada[2:]
+    else:
         return False
 
+    if posi_atual_p[0].isnumeric() and movimento_p[0].isnumeric():
+        if int(movimento_p[0])-1 >= 0 and int(movimento_p[0])-1 <= 7:
+            for i in range(len(coluna_referencia)):
+                if movimento_p[1] == coluna_referencia[i]:
+                    if tabuleiro_cores[int(posi_atual_p[0]) - 1][coluna_referencia.index(posi_atual_p[1])] == turno:
+                        return True
 
+
+def mover_peao():
+    global posi_atual_p
+    global movimento_p
+
+    if turno == BRANCAS and tabuleiro[int(posi_atual_p[0])-1][coluna_referencia.index(posi_atual_p[1])]:
+        if movimento_p[1] == posi_atual_p[1]:
+            if (int(movimento_p[0]) == int(posi_atual_p[0])-1) or (int(movimento_p[0]) == int(posi_atual_p[0])-2 and int(posi_atual_p[0]) == 7):
+                if tabuleiro_cores[int(movimento_p[0])-1][coluna_referencia.index(movimento_p[1])] == ESPACO:
+
+                    tabuleiro[int(posi_atual_p[0])-1][coluna_referencia.index(posi_atual_p[1])] = ESPACO
+                    tabuleiro[int(movimento_p[0])-1][coluna_referencia.index(movimento_p[1])] = PEAO_B
+
+                    tabuleiro_cores[int(posi_atual_p[0])-1][coluna_referencia.index(posi_atual_p[1])] = ESPACO
+                    tabuleiro_cores[int(movimento_p[0])-1][coluna_referencia.index(movimento_p[1])] = turno
+
+        elif coluna_referencia.index(posi_atual_p[1]) == coluna_referencia.index(movimento_p[1])+1 or \
+                coluna_referencia.index(posi_atual_p[1]) == coluna_referencia.index(movimento_p[1])-1:
+            if int(movimento_p[0]) == int(posi_atual_p[0])-1 and tabuleiro_cores[int(movimento_p[0])-1]\
+                    [coluna_referencia.index(movimento_p[1])] == PRETAS:
+
+                tabuleiro[int(posi_atual_p[0])-1][coluna_referencia.index(posi_atual_p[1])] = ESPACO
+                tabuleiro[int(movimento_p[0])-1][coluna_referencia.index(movimento_p[1])] = PEAO_B
+
+                tabuleiro_cores[int(posi_atual_p[0])-1][coluna_referencia.index(posi_atual_p[1])] = ESPACO
+                tabuleiro_cores[int(movimento_p[0])-1][coluna_referencia.index(movimento_p[1])] = turno
+
+    else:
+        if movimento_p[1] == posi_atual_p[1]:
+            if (int(movimento_p[0]) == int(posi_atual_p[0]) + 1) or (int(movimento_p[0]) == int(posi_atual_p[0]) + 2 and int(posi_atual_p[0]) == 2):
+                if tabuleiro_cores[int(movimento_p[0]) - 1][coluna_referencia.index(movimento_p[1])] == ESPACO:
+
+                    tabuleiro[int(posi_atual_p[0]) - 1][coluna_referencia.index(posi_atual_p[1])] = ESPACO
+                    tabuleiro[int(movimento_p[0]) - 1][coluna_referencia.index(movimento_p[1])] = PEAO_P
+
+                    tabuleiro_cores[int(posi_atual_p[0]) - 1][coluna_referencia.index(posi_atual_p[1])] = ESPACO
+                    tabuleiro_cores[int(movimento_p[0]) - 1][coluna_referencia.index(movimento_p[1])] = turno
+
+        elif coluna_referencia.index(posi_atual_p[1]) == coluna_referencia.index(movimento_p[1])+1 or \
+                coluna_referencia.index(posi_atual_p[1]) == coluna_referencia.index(movimento_p[1])-1:
+            if int(movimento_p[0]) == int(posi_atual_p[0])+1 and tabuleiro_cores[int(movimento_p[0])-1]\
+                    [coluna_referencia.index(movimento_p[1])] == BRANCAS:
+
+                tabuleiro[int(posi_atual_p[0])-1][coluna_referencia.index(posi_atual_p[1])] = ESPACO
+                tabuleiro[int(movimento_p[0])-1][coluna_referencia.index(movimento_p[1])] = PEAO_P
+
+                tabuleiro_cores[int(posi_atual_p[0])-1][coluna_referencia.index(posi_atual_p[1])] = ESPACO
+                tabuleiro_cores[int(movimento_p[0])-1][coluna_referencia.index(movimento_p[1])] = turno
+
+
+posi_atual_p: str
+movimento_p: str
 turno = BRANCAS
 tabuleiro = []
 tabuleiro_cores = []
@@ -121,9 +173,9 @@ criar_referencia_cor()
 while True:
     imprime_tabuleiro()
     print(MSG_TURNO.format(turno.upper()))
-    posi_atual, posi_deslocamento = input().split()
-    if validar_movimento(posi_atual, posi_deslocamento):
-        pass
+    coordenada_jogada = input()
+    if validar_jogada(coordenada_jogada):
+        mover_peao()
     else:
-        print("Comando incorreto.")
+        print(0)
     trocar_turno()
