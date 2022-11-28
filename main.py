@@ -116,8 +116,17 @@ def mover_peao():
 
     if turno == BRANCAS and tabuleiro[int(posi_atual_p[0])-1][coluna_referencia.index(posi_atual_p[1])]:
         if movimento_p[1] == posi_atual_p[1]:
-            if (int(movimento_p[0]) == int(posi_atual_p[0])-1) or (int(movimento_p[0]) == int(posi_atual_p[0])-2 and int(posi_atual_p[0]) == 7):
+            if int(movimento_p[0]) == int(posi_atual_p[0])-1:
                 if tabuleiro_cores[int(movimento_p[0])-1][coluna_referencia.index(movimento_p[1])] == ESPACO:
+
+                    tabuleiro[int(posi_atual_p[0])-1][coluna_referencia.index(posi_atual_p[1])] = ESPACO
+                    tabuleiro[int(movimento_p[0])-1][coluna_referencia.index(movimento_p[1])] = PEAO_B
+
+                    tabuleiro_cores[int(posi_atual_p[0])-1][coluna_referencia.index(posi_atual_p[1])] = ESPACO
+                    tabuleiro_cores[int(movimento_p[0])-1][coluna_referencia.index(movimento_p[1])] = turno
+
+            elif int(movimento_p[0]) == int(posi_atual_p[0])-2 and int(posi_atual_p[0]) == 7:
+                if tabuleiro_cores[int(movimento_p[0])][coluna_referencia.index(movimento_p[1])] == ESPACO:
 
                     tabuleiro[int(posi_atual_p[0])-1][coluna_referencia.index(posi_atual_p[1])] = ESPACO
                     tabuleiro[int(movimento_p[0])-1][coluna_referencia.index(movimento_p[1])] = PEAO_B
@@ -138,8 +147,17 @@ def mover_peao():
 
     else:
         if movimento_p[1] == posi_atual_p[1]:
-            if (int(movimento_p[0]) == int(posi_atual_p[0]) + 1) or (int(movimento_p[0]) == int(posi_atual_p[0]) + 2 and int(posi_atual_p[0]) == 2):
+            if int(movimento_p[0]) == int(posi_atual_p[0]) + 1:
                 if tabuleiro_cores[int(movimento_p[0]) - 1][coluna_referencia.index(movimento_p[1])] == ESPACO:
+
+                    tabuleiro[int(posi_atual_p[0]) - 1][coluna_referencia.index(posi_atual_p[1])] = ESPACO
+                    tabuleiro[int(movimento_p[0]) - 1][coluna_referencia.index(movimento_p[1])] = PEAO_P
+
+                    tabuleiro_cores[int(posi_atual_p[0]) - 1][coluna_referencia.index(posi_atual_p[1])] = ESPACO
+                    tabuleiro_cores[int(movimento_p[0]) - 1][coluna_referencia.index(movimento_p[1])] = turno
+
+            elif int(movimento_p[0]) == int(posi_atual_p[0]) + 2 and int(posi_atual_p[0]) == 2:
+                if tabuleiro_cores[int(movimento_p[0]) - 2][coluna_referencia.index(movimento_p[1])] == ESPACO:
 
                     tabuleiro[int(posi_atual_p[0]) - 1][coluna_referencia.index(posi_atual_p[1])] = ESPACO
                     tabuleiro[int(movimento_p[0]) - 1][coluna_referencia.index(movimento_p[1])] = PEAO_P
