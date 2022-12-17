@@ -1,92 +1,4 @@
-from constantes import *
-
-
-def verificar_horizontal_vertical(i, j):
-    for l in range(TAMANHO_TABULEIRO):
-        if l > 0:
-            if i - l >= 0:
-                if tabuleiro_cores[i - l][j] == ESPACO:
-                    tabuleiro_captura_verdes[i - l][j] = 1
-                elif tabuleiro_cores[i - l][j] == AZUIS:
-                    tabuleiro_captura_verdes[i - l][j] = 1
-                    break
-                else:
-                    break
-
-    for l in range(TAMANHO_TABULEIRO):
-        if l > 0:
-            if i + l < TAMANHO_TABULEIRO:
-                if tabuleiro_cores[i + l][j] == ESPACO:
-                    tabuleiro_captura_verdes[i + l][j] = 1
-                elif tabuleiro_cores[i + l][j] == AZUIS:
-                    tabuleiro_captura_verdes[i + l][j] = 1
-                    break
-                else:
-                    break
-
-    for l in range(TAMANHO_TABULEIRO):
-        if l > 0:
-            if j - l >= 0:
-                if tabuleiro_cores[i][j - l] == ESPACO:
-                    tabuleiro_captura_verdes[i][j - l] = 1
-                elif tabuleiro_cores[i][j - l] == AZUIS:
-                    tabuleiro_captura_verdes[i][j - l] = 1
-                    break
-                else:
-                    break
-
-    for l in range(TAMANHO_TABULEIRO):
-        if l > 0:
-            if j + l < TAMANHO_TABULEIRO:
-                if tabuleiro_cores[i][j + l] == ESPACO:
-                    tabuleiro_captura_verdes[i][j + l] = 1
-                elif tabuleiro_cores[i][j + l] == AZUIS:
-                    tabuleiro_captura_verdes[i][j + l] = 1
-                    break
-                else:
-                    break
-
-
-def verificar_diagonal(i, j):
-    for l in range(1, TAMANHO_TABULEIRO):
-        if i - l >= 0 and j - l >= 0:
-            if tabuleiro[i - l][j - l] == ESPACO:
-                tabuleiro_captura_verdes[i - l][j - l] = 1
-            elif tabuleiro_cores[i - l][j - l] == AZUIS:
-                tabuleiro_captura_verdes[i - l][j - l] = 1
-                break
-            else:
-                break
-
-    for l in range(1, TAMANHO_TABULEIRO):
-        if i + l < TAMANHO_TABULEIRO and j + l < TAMANHO_TABULEIRO:
-            if tabuleiro[i + l][j + l] == ESPACO:
-                tabuleiro_captura_verdes[i + l][j + l] = 1
-            elif tabuleiro_cores[i + l][j + l] == AZUIS:
-                tabuleiro_captura_verdes[i + l][j + l] = 1
-                break
-            else:
-                break
-
-    for l in range(1, TAMANHO_TABULEIRO):
-        if i + l < TAMANHO_TABULEIRO and j - l >= 0:
-            if tabuleiro[i + l][j - l] == ESPACO:
-                tabuleiro_captura_verdes[i + l][j - l] = 1
-            elif tabuleiro_cores[i + l][j - l] == AZUIS:
-                tabuleiro_captura_verdes[i + l][j - l] = 1
-                break
-            else:
-                break
-
-    for l in range(1, TAMANHO_TABULEIRO):
-        if i - l >= 0 and j + l < TAMANHO_TABULEIRO:
-            if tabuleiro[i - l][j + l] == ESPACO:
-                tabuleiro_captura_verdes[i - l][j + l] = 1
-            elif tabuleiro_cores[i - l][j + l] == AZUIS:
-                tabuleiro_captura_verdes[i - l][j + l] = 1
-                break
-            else:
-                break
+from peças import *
 
 
 def montando_tabuleiro():
@@ -126,53 +38,222 @@ def criar_referencia_cor():
         tabuleiro_cores.append(linha)
 
 
-def atualizar_referencia_captura_verdes():
+def atualizar_referencia_captura(cor):
     global tabuleiro
     global tabuleiro_captura_verdes
+    global tabuleiro_captura_azuis
 
-    tabuleiro_captura_verdes = [[0 for x in range(TAMANHO_TABULEIRO)] for y in range(TAMANHO_TABULEIRO)]
+    def verificar_horizontal_vertical():
+        for l in range(1, TAMANHO_TABULEIRO):
+            if i + l < TAMANHO_TABULEIRO:
+                if tabuleiro_cores[i + l][j] == ESPACO:
+                    if cor == VERDES:
+                        tabuleiro_captura_verdes[i + l][j] = 1
+                    else:
+                        tabuleiro_captura_azuis[i + l][j] = 1
+                elif tabuleiro_cores[i + l][j] == cor or \
+                        (cor == VERDES and tabuleiro[i + l][j] == REI_A) or (
+                        cor == AZUIS and tabuleiro[i + l][j] == REI_V):
+                    if cor == VERDES:
+                        tabuleiro_captura_verdes[i + l][j] = 1
+                        break
+                    else:
+                        tabuleiro_captura_azuis[i + l][j] = 1
+                        break
+                else:
+                    break
+
+        for l in range(1, TAMANHO_TABULEIRO):
+            if i - l >= 0:
+                if tabuleiro_cores[i - l][j] == ESPACO:
+                    if cor == VERDES:
+                        tabuleiro_captura_verdes[i - l][j] = 1
+                    else:
+                        tabuleiro_captura_azuis[i - l][j] = 1
+                elif tabuleiro_cores[i - l][j] == cor or \
+                        (cor == VERDES and tabuleiro[i - l][j] == REI_A) or (
+                        cor == AZUIS and tabuleiro[i - l][j] == REI_V):
+                    if cor == VERDES:
+                        tabuleiro_captura_verdes[i - l][j] = 1
+                        break
+                    else:
+                        tabuleiro_captura_azuis[i - l][j] = 1
+                        break
+                else:
+                    break
+
+        for l in range(1, TAMANHO_TABULEIRO):
+            if j + l < TAMANHO_TABULEIRO:
+                if tabuleiro_cores[i][j + l] == ESPACO:
+                    if cor == VERDES:
+                        tabuleiro_captura_verdes[i][j + l] = 1
+                    else:
+                        tabuleiro_captura_azuis[i][j + l] = 1
+                elif tabuleiro_cores[i][j + l] == cor or (cor == VERDES and tabuleiro[i][j + j] == REI_A) or (
+                        cor == AZUIS and tabuleiro[i][j + j] == REI_V):
+                    if cor == VERDES:
+                        tabuleiro_captura_verdes[i][j + l] = 1
+                        break
+                    else:
+                        tabuleiro_captura_azuis[i][j + l] = 1
+                        break
+                else:
+                    break
+
+        for l in range(1, TAMANHO_TABULEIRO):
+            if j - l >= 0:
+                if tabuleiro_cores[i][j - l] == ESPACO:
+                    if cor == VERDES:
+                        tabuleiro_captura_verdes[i][j - l] = 1
+                    else:
+                        tabuleiro_captura_azuis[i][j - l] = 1
+                elif tabuleiro_cores[i][j - l] == cor or (cor == VERDES and tabuleiro[i][j - j] == REI_A) or (
+                        cor == AZUIS and tabuleiro[i][j - j] == REI_V):
+                    if cor == VERDES:
+                        tabuleiro_captura_verdes[i][j - l] = 1
+                        break
+                    else:
+                        tabuleiro_captura_azuis[i][j - l] = 1
+                        break
+                else:
+                    break
+
+    def verificar_diagonal():
+        for l in range(1, TAMANHO_TABULEIRO):
+            if i + l < TAMANHO_TABULEIRO and j + l < TAMANHO_TABULEIRO:
+                if tabuleiro_cores[i + l][j + l] == ESPACO:
+                    if cor == VERDES:
+                        tabuleiro_captura_verdes[i + l][j + l] = 1
+                    else:
+                        tabuleiro_captura_azuis[i + l][j + l] = 1
+                elif tabuleiro_cores[i + l][j + l] == cor or \
+                        (cor == VERDES and tabuleiro[i + l][j + l] == REI_A) or (
+                        cor == AZUIS and tabuleiro[i + l][j + l] == REI_V):
+                    if cor == VERDES:
+                        tabuleiro_captura_verdes[i + l][j + l] = 1
+                        break
+                    else:
+                        tabuleiro_captura_azuis[i + l][j + l] = 1
+                        break
+                else:
+                    break
+
+        for l in range(1, TAMANHO_TABULEIRO):
+            if i + l < TAMANHO_TABULEIRO and j - l >= 0:
+                if tabuleiro_cores[i + l][j - l] == ESPACO:
+                    if cor == VERDES:
+                        tabuleiro_captura_verdes[i + l][j - l] = 1
+                    else:
+                        tabuleiro_captura_azuis[i + l][j - l] = 1
+                elif tabuleiro_cores[i + l][j - l] == cor or \
+                        (cor == VERDES and tabuleiro[i + l][j - l] == REI_A) or (
+                        cor == AZUIS and tabuleiro[i + l][j - l] == REI_V):
+                    if cor == VERDES:
+                        tabuleiro_captura_verdes[i + l][j - l] = 1
+                        break
+                    else:
+                        tabuleiro_captura_azuis[i + l][j - l] = 1
+                        break
+                else:
+                    break
+
+        for l in range(1, TAMANHO_TABULEIRO):
+            if i - l >= 0 and j + l < TAMANHO_TABULEIRO:
+                if tabuleiro_cores[i - l][j + l] == ESPACO:
+                    if cor == VERDES:
+                        tabuleiro_captura_verdes[i - l][j + l] = 1
+                    else:
+                        tabuleiro_captura_azuis[i - l][j + l] = 1
+                elif tabuleiro_cores[i - l][j + l] == cor or \
+                        (cor == VERDES and tabuleiro[i - l][j + l] == REI_A) or (
+                        cor == AZUIS and tabuleiro[i - l][j + l] == REI_V):
+                    if cor == VERDES:
+                        tabuleiro_captura_verdes[i - l][j + l] = 1
+                        break
+                    else:
+                        tabuleiro_captura_azuis[i - l][j + l] = 1
+                        break
+                else:
+                    break
+
+        for l in range(1, TAMANHO_TABULEIRO):
+            if i - l >= 0 and j - l >= 0:
+                if tabuleiro_cores[i - l][j - l] == ESPACO:
+                    if cor == VERDES:
+                        tabuleiro_captura_verdes[i - l][j - l] = 1
+                    else:
+                        tabuleiro_captura_azuis[i - l][j - l] = 1
+                elif tabuleiro_cores[i - l][j - l] == cor or \
+                        (cor == VERDES and tabuleiro[i - l][j - l] == REI_A) or (
+                        cor == AZUIS and tabuleiro[i - l][j - l] == REI_V):
+                    if cor == VERDES:
+                        tabuleiro_captura_verdes[i - l][j - l] = 1
+                        break
+                    else:
+                        tabuleiro_captura_azuis[i - l][j - l] = 1
+                        break
+                else:
+                    break
+
+    if cor == VERDES:
+        tabuleiro_captura_verdes = [[0 for x in range(TAMANHO_TABULEIRO)] for y in range(TAMANHO_TABULEIRO)]
+    else:
+        tabuleiro_captura_azuis = [[0 for x in range(TAMANHO_TABULEIRO)] for y in range(TAMANHO_TABULEIRO)]
 
     for i in range(TAMANHO_TABULEIRO):
         for j in range(TAMANHO_TABULEIRO):
-            if tabuleiro_cores[i][j] == VERDES:
+            if tabuleiro_cores[i][j] == cor:
+                if tabuleiro[i][j] == PEAO_V or tabuleiro[i][j] == PEAO_A:
+                    if tabuleiro[i][j] == PEAO_V:
+                        if i - 1 >= 0 and j + 1 < TAMANHO_TABULEIRO:
+                            if tabuleiro_cores[i-1][j+1] == cor or tabuleiro_cores[i-1][j+1] == ESPACO or tabuleiro[i-1][j+1] == REI_A:
+                                tabuleiro_captura_verdes[i - 1][j + 1] = 1
+                        if i - 1 >= 0 and j - 1 >= 0:
+                            if tabuleiro_cores[i - 1][j - 1] == cor or tabuleiro_cores[i - 1][j - 1] == ESPACO or tabuleiro[i - 1][j - 1] == REI_A:
+                                tabuleiro_captura_verdes[i - 1][j - 1] = 1
 
-                if tabuleiro[i][j] == PEAO_V:
-                    if i - 1 >= 0 and j + 1 < TAMANHO_TABULEIRO:
-                        if tabuleiro_cores[i - 1][j + 1] != VERDES:
-                            tabuleiro_captura_verdes[i - 1][j + 1] = 1
-                    if i - 1 >= 0 and j - 1 >= 0:
-                        if tabuleiro_cores[i - 1][j - 1] != VERDES:
-                            tabuleiro_captura_verdes[i - 1][j - 1] = 1
+                    else:
+                        if i + 1 < TAMANHO_TABULEIRO and j + 1 < TAMANHO_TABULEIRO:
+                            if tabuleiro_cores[i + 1][j + 1] == cor or tabuleiro_cores[i + 1][j + 1] == ESPACO or \
+                                    tabuleiro[i + 1][j + 1] == REI_V:
+                                tabuleiro_captura_azuis[i + 1][j + 1] = 1
+                        if i + 1 < TAMANHO_TABULEIRO and j - 1 >= 0:
+                            if tabuleiro_cores[i + 1][j - 1] == cor or tabuleiro_cores[i + 1][j - 1] == ESPACO or \
+                                    tabuleiro[i + 1][j - 1] == REI_V:
+                                tabuleiro_captura_azuis[i + 1][j - 1] = 1
 
-                elif tabuleiro[i][j] == BISPO_V:
-                    verificar_diagonal(i, j)
-
-                elif tabuleiro[i][j] == CAVALO_V:
-                    for l in range(-2, 3):
+                elif tabuleiro[i][j] == CAVALO_V or tabuleiro[i][j] == CAVALO_A:
+                    for l in range(-2, 3, 1):
                         if l != 0:
-                            for c in range(-2, 3):
-                                if c != 0:
-                                    if c != l and c != l*-1:
-                                        if i+l >= 0 and i+l < TAMANHO_TABULEIRO:
-                                            if j+c >= 0 and j+c < TAMANHO_TABULEIRO:
-                                                if tabuleiro_cores[i+l][j+c] != VERDES:
-                                                    tabuleiro_captura_verdes[i+l][j+c] = 1
+                            for c in range(-2, 3, 1):
+                                if c != 0 and l + c != 0 and l != c:
+                                    if (j+c >= 0 and j+c < TAMANHO_TABULEIRO) and (i+l >= 0 and i+l < TAMANHO_TABULEIRO):
+                                        if tabuleiro_cores[i+l][j+c] == ESPACO or tabuleiro_cores[i+l][j+c] == cor or \
+                                                (cor == VERDES and tabuleiro[i+l][j+c] == REI_A) or (cor == AZUIS and tabuleiro[i+l][j+c] == REI_V):
+                                            if cor == VERDES:
+                                                tabuleiro_captura_verdes[i+l][j+c] = 1
+                                            else:
+                                                tabuleiro_captura_azuis[i + l][j + c] = 1
 
-                elif tabuleiro[i][j] == TORRE_V:
-                    verificar_horizontal_vertical(i, j)
+                elif tabuleiro[i][j] == TORRE_V or tabuleiro[i][j] == TORRE_A:
+                    verificar_horizontal_vertical()
 
-                elif tabuleiro[i][j] == REI_V:
+                elif tabuleiro[i][j] == BISPO_V or tabuleiro[i][j] == BISPO_A:
+                    verificar_diagonal()
+
+                elif tabuleiro[i][j] == RAINHA_V or tabuleiro[i][j] == RAINHA_A:
+                    verificar_horizontal_vertical()
+                    verificar_diagonal()
+
+                elif tabuleiro[i][j] == REI_V or tabuleiro[i][j] == REI_A:
                     for l in range(-1, 2):
                         for c in range(-1, 2):
-                            if i+l >= 0 and i+l < TAMANHO_TABULEIRO:
-                                if j + c >= 0 and j + c < TAMANHO_TABULEIRO:
-                                    if not(l == 0 and c == 0):
-                                        if tabuleiro_cores[i+l][j+c] != VERDES:
-                                            tabuleiro_captura_verdes[i+l][j+c] = 1
-
-                elif tabuleiro[i][j] == RAINHA_V:
-                    verificar_horizontal_vertical(i, j)
-                    verificar_diagonal(i, j)
+                            if (i + l >= 0 and i+l < TAMANHO_TABULEIRO) and (j + c >= 0 and j+c < TAMANHO_TABULEIRO):
+                                if tabuleiro_cores[i + l][j + c] == ESPACO or tabuleiro_cores[i + l][j + c] == cor:
+                                    if cor == VERDES:
+                                        tabuleiro_captura_verdes[i + l][j + c] = 1
+                                    else:
+                                        tabuleiro_captura_azuis[i + l][j + c] = 1
 
 
 def imprime_tabuleiro():
@@ -198,6 +279,7 @@ def imprime_tabuleiro():
 
 def trocar_turno():
     global turno
+
     if turno == VERDES:
         turno = AZUIS
     else:
@@ -215,226 +297,15 @@ def validar_jogada():
                     return True
 
 
-def verificar_peao():
-    global posi_atual_p
-    global movimento_p
-
-    v = False
-
-    if movimento_p[1] == posi_atual_p[1]:
-        if int(movimento_p[0]) == int(posi_atual_p[0]) - 1:
-            if tabuleiro_cores[int(movimento_p[0]) - 1][COLUNA_REFERENCIA.index(movimento_p[1])] == ESPACO:
-                v = True
-
-        elif int(movimento_p[0]) == int(posi_atual_p[0]) - 2 and int(posi_atual_p[0]) == 7:
-            if tabuleiro_cores[int(movimento_p[0])][COLUNA_REFERENCIA.index(movimento_p[1])] == ESPACO:
-                v = True
-
-    elif COLUNA_REFERENCIA.index(posi_atual_p[1]) == COLUNA_REFERENCIA.index(movimento_p[1]) + 1 or \
-            COLUNA_REFERENCIA.index(posi_atual_p[1]) == COLUNA_REFERENCIA.index(movimento_p[1]) - 1:
-        if int(movimento_p[0]) == int(posi_atual_p[0]) - 1 and tabuleiro_cores[int(movimento_p[0]) - 1] \
-                [COLUNA_REFERENCIA.index(movimento_p[1])] == AZUIS:
-            v = True
-
-    if movimento_p[1] == posi_atual_p[1]:
-        if int(movimento_p[0]) == int(posi_atual_p[0]) + 1:
-            if tabuleiro_cores[int(movimento_p[0]) - 1][COLUNA_REFERENCIA.index(movimento_p[1])] == ESPACO:
-                v = True
-
-        elif int(movimento_p[0]) == int(posi_atual_p[0]) + 2 and int(posi_atual_p[0]) == 2:
-            if tabuleiro_cores[int(movimento_p[0]) - 2][COLUNA_REFERENCIA.index(movimento_p[1])] == ESPACO:
-                v = True
-
-    elif COLUNA_REFERENCIA.index(posi_atual_p[1]) == COLUNA_REFERENCIA.index(movimento_p[1]) + 1 or \
-            COLUNA_REFERENCIA.index(posi_atual_p[1]) == COLUNA_REFERENCIA.index(movimento_p[1]) - 1:
-        if int(movimento_p[0]) == int(posi_atual_p[0]) + 1 and tabuleiro_cores[int(movimento_p[0]) - 1] \
-                [COLUNA_REFERENCIA.index(movimento_p[1])] == VERDES:
-            v = True
-
-    if v:
-        return True
-
-
-def verificar_cavalo():
-    v = False
-    if tabuleiro_cores[int(movimento_p[0]) - 1][COLUNA_REFERENCIA.index(movimento_p[1])] != turno:
-        for i in range(-2, 3, 4):
-            for j in range(-1, 2, 2):
-                if (int(movimento_p[0]) == int(posi_atual_p[0]) + i and COLUNA_REFERENCIA.index(
-                        movimento_p[1]) == COLUNA_REFERENCIA.index(posi_atual_p[1]) + j) or \
-                        (int(movimento_p[0]) == int(posi_atual_p[0]) + j and COLUNA_REFERENCIA.index(
-                            movimento_p[1]) == COLUNA_REFERENCIA.index(posi_atual_p[1]) + i):
-                    v = True
-
-    if v:
-        return True
-
-
-def verificar_torre():
-    global posi_atual_p
-    global movimento_p
-
-    v = False
-    cont = 0
-
-    if tabuleiro_cores[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] == turno and \
-            tabuleiro_cores[int(movimento_p[0]) - 1][COLUNA_REFERENCIA.index(movimento_p[1])] != turno:
-        if posi_atual_p[0] == movimento_p[0]:
-            if COLUNA_REFERENCIA.index(posi_atual_p[1]) > COLUNA_REFERENCIA.index(movimento_p[1]):
-                for i in range(COLUNA_REFERENCIA.index(movimento_p[1]) + 1, COLUNA_REFERENCIA.index(posi_atual_p[1])):
-                    if tabuleiro_cores[int(posi_atual_p[0]) - 1][i] == ESPACO:
-                        cont += 1
-            else:
-                for i in range(COLUNA_REFERENCIA.index(posi_atual_p[1]) + 1, COLUNA_REFERENCIA.index(movimento_p[1])):
-                    if tabuleiro_cores[int(posi_atual_p[0]) - 1][i] == ESPACO:
-                        cont += 1
-
-            if cont == abs(COLUNA_REFERENCIA.index(posi_atual_p[1]) - COLUNA_REFERENCIA.index(movimento_p[1])) - 1:
-                v = True
-
-        elif posi_atual_p[1] == movimento_p[1]:
-            if int(posi_atual_p[0]) > int(movimento_p[0]):
-                for i in range(int(movimento_p[0]), int(posi_atual_p[0]) - 1):
-                    if tabuleiro_cores[i][COLUNA_REFERENCIA.index(posi_atual_p[1])] == ESPACO:
-                        cont += 1
-            else:
-                for i in range(int(posi_atual_p[0]), int(movimento_p[0]) - 1):
-                    if tabuleiro_cores[i][COLUNA_REFERENCIA.index(posi_atual_p[1])] == ESPACO:
-                        cont += 1
-
-            if cont == abs(int(posi_atual_p[0]) - int(movimento_p[0])) - 1:
-                v = True
-
-    if v:
-        return True
-
-
-def verificar_rei():
-    v = False
-
-    if tabuleiro_cores[int(movimento_p[0]) - 1][COLUNA_REFERENCIA.index(movimento_p[1])] != turno:
-        if tabuleiro_cores[int(posi_atual_p[0]) - 1] == tabuleiro_cores[int(movimento_p[0]) - 1] or (
-                tabuleiro_cores[int(posi_atual_p[0]) - 1] == tabuleiro_cores[int(movimento_p[0])]) or \
-                tabuleiro_cores[int(posi_atual_p[0]) - 1] == tabuleiro_cores[int(movimento_p[0]) - 2]:
-            if COLUNA_REFERENCIA.index(posi_atual_p[1]) == COLUNA_REFERENCIA.index(movimento_p[1]):
-                v = True
-
-            elif COLUNA_REFERENCIA.index(posi_atual_p[1]) == COLUNA_REFERENCIA.index(movimento_p[1]) + 1:
-                v = True
-
-            elif COLUNA_REFERENCIA.index(posi_atual_p[1]) == COLUNA_REFERENCIA.index(movimento_p[1]) - 1:
-                v = True
-
-    if v:
-        return True
-
-
-def verificar_bispo():
-    v = False
-    cont = 0
-    if tabuleiro_cores[int(movimento_p[0]) - 1][COLUNA_REFERENCIA.index(movimento_p[1])] != turno:
-        if int(posi_atual_p[0]) - 1 > int(movimento_p[0]) - 1:
-            if COLUNA_REFERENCIA.index(posi_atual_p[1]) > COLUNA_REFERENCIA.index(movimento_p[1]):
-                x = (int(posi_atual_p[0]) - 1) - (int(movimento_p[0]) - 1)
-                v = int(movimento_p[0])
-                for i in range(COLUNA_REFERENCIA.index(movimento_p[1]) + 1, COLUNA_REFERENCIA.index(posi_atual_p[1])):
-                    if tabuleiro_cores[v][i] != ESPACO:
-                        cont += 1
-                    v += 1
-                if cont == 0:
-                    if COLUNA_REFERENCIA.index(posi_atual_p[1]) - x == COLUNA_REFERENCIA.index(movimento_p[1]):
-                        v = True
-
-            elif COLUNA_REFERENCIA.index(posi_atual_p[1]) < COLUNA_REFERENCIA.index(movimento_p[1]):
-                x = (int(posi_atual_p[0]) - 1) - (int(movimento_p[0]) - 1)
-                v = int(movimento_p[0])
-                for i in range(COLUNA_REFERENCIA.index(movimento_p[1]) - 1, COLUNA_REFERENCIA.index(posi_atual_p[1]),
-                               -1):
-                    if tabuleiro_cores[v][i] != ESPACO:
-                        cont += 1
-                    v += 1
-                if cont == 0:
-                    if COLUNA_REFERENCIA.index(posi_atual_p[1]) + x == COLUNA_REFERENCIA.index(movimento_p[1]):
-                        v = True
-
-        elif int(posi_atual_p[0]) - 1 < int(movimento_p[0]) - 1:
-            if COLUNA_REFERENCIA.index(posi_atual_p[1]) > COLUNA_REFERENCIA.index(movimento_p[1]):
-                x = (int(movimento_p[0]) - 1) - (int(posi_atual_p[0]) - 1)
-                v = int(posi_atual_p[0])
-                for i in range(COLUNA_REFERENCIA.index(posi_atual_p[1]) - 1, COLUNA_REFERENCIA.index(movimento_p[1]),
-                               -1):
-                    if tabuleiro_cores[v][i] != ESPACO:
-                        cont += 1
-                    v += 1
-                if cont == 0:
-                    if COLUNA_REFERENCIA.index(posi_atual_p[1]) - x == COLUNA_REFERENCIA.index(movimento_p[1]):
-                        v = True
-
-            elif COLUNA_REFERENCIA.index(posi_atual_p[1]) < COLUNA_REFERENCIA.index(movimento_p[1]):
-                x = (int(movimento_p[0]) - 1) - (int(posi_atual_p[0]) - 1)
-                v = int(posi_atual_p[0])
-                for i in range(COLUNA_REFERENCIA.index(posi_atual_p[1]) + 1, COLUNA_REFERENCIA.index(movimento_p[1])):
-                    if tabuleiro_cores[v][i] != ESPACO:
-                        cont += 1
-                    v += 1
-                if cont == 0:
-                    if COLUNA_REFERENCIA.index(posi_atual_p[1]) + x == COLUNA_REFERENCIA.index(movimento_p[1]):
-                        v = True
-
-    if v:
-        return True
-
-
-def mover_peça(peça):
-    tabuleiro[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] = ESPACO
-    tabuleiro_cores[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] = ESPACO
-    tabuleiro_cores[int(movimento_p[0]) - 1][COLUNA_REFERENCIA.index(movimento_p[1])] = turno
-
-    if peça == "peão":
-        if turno == VERDES:
-            tabuleiro[int(movimento_p[0]) - 1][COLUNA_REFERENCIA.index(movimento_p[1])] = PEAO_V
-        else:
-            tabuleiro[int(movimento_p[0]) - 1][COLUNA_REFERENCIA.index(movimento_p[1])] = PEAO_A
-
-    elif peça == "cavalo":
-        if turno == VERDES:
-            tabuleiro[int(movimento_p[0]) - 1][COLUNA_REFERENCIA.index(movimento_p[1])] = CAVALO_V
-        else:
-            tabuleiro[int(movimento_p[0]) - 1][COLUNA_REFERENCIA.index(movimento_p[1])] = CAVALO_A
-
-    elif peça == "torre":
-        if turno == VERDES:
-            tabuleiro[int(movimento_p[0]) - 1][COLUNA_REFERENCIA.index(movimento_p[1])] = TORRE_V
-        else:
-            tabuleiro[int(movimento_p[0]) - 1][COLUNA_REFERENCIA.index(movimento_p[1])] = TORRE_A
-
-    elif peça == "rei":
-        if turno == VERDES:
-            tabuleiro[int(movimento_p[0]) - 1][COLUNA_REFERENCIA.index(movimento_p[1])] = REI_V
-        else:
-            tabuleiro[int(movimento_p[0]) - 1][COLUNA_REFERENCIA.index(movimento_p[1])] = REI_A
-
-    elif peça == "bispo":
-        if turno == VERDES:
-            tabuleiro[int(movimento_p[0]) - 1][COLUNA_REFERENCIA.index(movimento_p[1])] = BISPO_V
-        else:
-            tabuleiro[int(movimento_p[0]) - 1][COLUNA_REFERENCIA.index(movimento_p[1])] = BISPO_A
-
-    elif peça == "rainha":
-        if turno == VERDES:
-            tabuleiro[int(movimento_p[0]) - 1][COLUNA_REFERENCIA.index(movimento_p[1])] = RAINHA_V
-        else:
-            tabuleiro[int(movimento_p[0]) - 1][COLUNA_REFERENCIA.index(movimento_p[1])] = RAINHA_A
-
-
 def jogar():
     global valido
     valido = False
+
     if tabuleiro[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] == PEAO_V and turno == VERDES or \
             tabuleiro[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] == PEAO_A and turno == AZUIS:
 
-        if verificar_peao():
-            mover_peça("peão")
+        if verificar_peao(posi_atual_p, movimento_p):
+            mover_peça("peão", posi_atual_p, movimento_p, turno)
             valido = True
 
         else:
@@ -443,8 +314,8 @@ def jogar():
     elif tabuleiro[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] == CAVALO_V and turno == VERDES or \
             tabuleiro[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] == CAVALO_A and turno == AZUIS:
 
-        if verificar_cavalo():
-            mover_peça("cavalo")
+        if verificar_cavalo(posi_atual_p, movimento_p, turno):
+            mover_peça("cavalo", posi_atual_p, movimento_p, turno)
             valido = True
 
         else:
@@ -453,8 +324,8 @@ def jogar():
     elif tabuleiro[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] == TORRE_V and turno == VERDES or \
             tabuleiro[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] == TORRE_A and turno == AZUIS:
 
-        if verificar_torre():
-            mover_peça("torre")
+        if verificar_torre(posi_atual_p, movimento_p, turno):
+            mover_peça("torre", posi_atual_p, movimento_p, turno)
             valido = True
 
         else:
@@ -463,8 +334,8 @@ def jogar():
     elif tabuleiro[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] == REI_V and turno == VERDES or \
             tabuleiro[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] == REI_A and turno == AZUIS:
 
-        if verificar_rei():
-            mover_peça("rei")
+        if verificar_rei(posi_atual_p, movimento_p, turno):
+            mover_peça("rei", posi_atual_p, movimento_p, turno)
             valido = True
 
         else:
@@ -473,8 +344,8 @@ def jogar():
     elif tabuleiro[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] == BISPO_V and turno == VERDES or \
             tabuleiro[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] == BISPO_A and turno == AZUIS:
 
-        if verificar_bispo():
-            mover_peça("bispo")
+        if verificar_bispo(posi_atual_p, movimento_p, turno):
+            mover_peça("bispo", posi_atual_p, movimento_p, turno)
             valido = True
 
         else:
@@ -483,8 +354,8 @@ def jogar():
     elif tabuleiro[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] == RAINHA_V and turno == VERDES or \
             tabuleiro[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] == RAINHA_A and turno == AZUIS:
 
-        if verificar_bispo() or verificar_torre():
-            mover_peça("rainha")
+        if verificar_bispo(posi_atual_p, movimento_p, turno) or verificar_torre(posi_atual_p, movimento_p, turno):
+            mover_peça("rainha", posi_atual_p, movimento_p, turno)
             valido = True
 
         else:
@@ -508,23 +379,29 @@ def criar_posis(coordenada):
         return False
 
 
+
+valido = False
 posi_atual_p: str
 movimento_p: str
 turno = VERDES
-valido = False
-tabuleiro = []
-tabuleiro_cores = []
 tabuleiro_captura_verdes = []
+tabuleiro_captura_azuis = []
 
 montando_tabuleiro()
 criar_referencia_cor()
 
 while True:
-    atualizar_referencia_captura_verdes()
+    atualizar_referencia_captura(AZUIS)
+    atualizar_referencia_captura(VERDES)
     imprime_tabuleiro()
 
     for i in range(TAMANHO_TABULEIRO):
         print(*tabuleiro_captura_verdes[i])
+
+    print()
+
+    for i in range(TAMANHO_TABULEIRO):
+        print(*tabuleiro_captura_azuis[i])
 
     print(MSG_TURNO.format(turno.upper()))
     coordenada_jogada = input()

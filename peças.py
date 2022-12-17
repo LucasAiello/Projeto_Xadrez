@@ -1,0 +1,214 @@
+from constantes import *
+
+
+def verificar_peao(inicial, movimento):
+    v = False
+
+    if movimento[1] == inicial[1]:
+        if int(movimento[0]) == int(inicial[0]) - 1:
+            if tabuleiro_cores[int(movimento[0]) - 1][COLUNA_REFERENCIA.index(movimento[1])] == ESPACO:
+                v = True
+
+        elif int(movimento[0]) == int(inicial[0]) - 2 and int(inicial[0]) == 7:
+            if tabuleiro_cores[int(movimento[0])][COLUNA_REFERENCIA.index(movimento[1])] == ESPACO:
+                v = True
+
+    elif COLUNA_REFERENCIA.index(inicial[1]) == COLUNA_REFERENCIA.index(movimento[1]) + 1 or \
+            COLUNA_REFERENCIA.index(inicial[1]) == COLUNA_REFERENCIA.index(movimento[1]) - 1:
+        if int(movimento[0]) == int(inicial[0]) - 1 and tabuleiro_cores[int(movimento[0]) - 1] \
+                [COLUNA_REFERENCIA.index(movimento[1])] == AZUIS:
+            v = True
+
+    if movimento[1] == inicial[1]:
+        if int(movimento[0]) == int(inicial[0]) + 1:
+            if tabuleiro_cores[int(movimento[0]) - 1][COLUNA_REFERENCIA.index(movimento[1])] == ESPACO:
+                v = True
+
+        elif int(movimento[0]) == int(inicial[0]) + 2 and int(inicial[0]) == 2:
+            if tabuleiro_cores[int(movimento[0]) - 2][COLUNA_REFERENCIA.index(movimento[1])] == ESPACO:
+                v = True
+
+    elif COLUNA_REFERENCIA.index(inicial[1]) == COLUNA_REFERENCIA.index(movimento[1]) + 1 or \
+            COLUNA_REFERENCIA.index(inicial[1]) == COLUNA_REFERENCIA.index(movimento[1]) - 1:
+        if int(movimento[0]) == int(inicial[0]) + 1 and tabuleiro_cores[int(movimento[0]) - 1] \
+                [COLUNA_REFERENCIA.index(movimento[1])] == VERDES:
+            v = True
+
+    if v:
+        return True
+
+
+def verificar_cavalo(inicial, movimento, turno):
+    v = False
+    if tabuleiro_cores[int(movimento[0]) - 1][COLUNA_REFERENCIA.index(movimento[1])] != turno:
+        for i in range(-2, 3, 4):
+            for j in range(-1, 2, 2):
+                if (int(movimento[0]) == int(inicial[0]) + i and COLUNA_REFERENCIA.index(
+                        movimento[1]) == COLUNA_REFERENCIA.index(inicial[1]) + j) or \
+                        (int(movimento[0]) == int(inicial[0]) + j and COLUNA_REFERENCIA.index(
+                            movimento[1]) == COLUNA_REFERENCIA.index(inicial[1]) + i):
+                    v = True
+
+    if v:
+        return True
+
+
+def verificar_torre(inicial, movimento, turno):
+    v = False
+    cont = 0
+
+    if tabuleiro_cores[int(inicial[0]) - 1][COLUNA_REFERENCIA.index(inicial[1])] == turno and \
+            tabuleiro_cores[int(movimento[0]) - 1][COLUNA_REFERENCIA.index(movimento[1])] != turno:
+        if inicial[0] == movimento[0]:
+            if COLUNA_REFERENCIA.index(inicial[1]) > COLUNA_REFERENCIA.index(movimento[1]):
+                for i in range(COLUNA_REFERENCIA.index(movimento[1]) + 1, COLUNA_REFERENCIA.index(inicial[1])):
+                    if tabuleiro_cores[int(inicial[0]) - 1][i] == ESPACO:
+                        cont += 1
+            else:
+                for i in range(COLUNA_REFERENCIA.index(inicial[1]) + 1, COLUNA_REFERENCIA.index(movimento[1])):
+                    if tabuleiro_cores[int(inicial[0]) - 1][i] == ESPACO:
+                        cont += 1
+
+            if cont == abs(COLUNA_REFERENCIA.index(inicial[1]) - COLUNA_REFERENCIA.index(movimento[1])) - 1:
+                v = True
+
+        elif inicial[1] == movimento[1]:
+            if int(inicial[0]) > int(movimento[0]):
+                for i in range(int(movimento[0]), int(inicial[0]) - 1):
+                    if tabuleiro_cores[i][COLUNA_REFERENCIA.index(inicial[1])] == ESPACO:
+                        cont += 1
+            else:
+                for i in range(int(inicial[0]), int(movimento[0]) - 1):
+                    if tabuleiro_cores[i][COLUNA_REFERENCIA.index(inicial[1])] == ESPACO:
+                        cont += 1
+
+            if cont == abs(int(inicial[0]) - int(movimento[0])) - 1:
+                v = True
+
+    if v:
+        return True
+
+
+def verificar_rei(inicial, movimento, turno):
+    v = False
+
+    if tabuleiro_cores[int(movimento[0]) - 1][COLUNA_REFERENCIA.index(movimento[1])] != turno:
+        if tabuleiro_cores[int(inicial[0]) - 1] == tabuleiro_cores[int(movimento[0]) - 1] or (
+                tabuleiro_cores[int(inicial[0]) - 1] == tabuleiro_cores[int(movimento[0])]) or \
+                tabuleiro_cores[int(inicial[0]) - 1] == tabuleiro_cores[int(movimento[0]) - 2]:
+            if COLUNA_REFERENCIA.index(inicial[1]) == COLUNA_REFERENCIA.index(movimento[1]):
+                v = True
+
+            elif COLUNA_REFERENCIA.index(inicial[1]) == COLUNA_REFERENCIA.index(movimento[1]) + 1:
+                v = True
+
+            elif COLUNA_REFERENCIA.index(inicial[1]) == COLUNA_REFERENCIA.index(movimento[1]) - 1:
+                v = True
+
+    if v:
+        return True
+
+
+def verificar_bispo(inicial, movimento, turno):
+    v = False
+    cont = 0
+    if tabuleiro_cores[int(movimento[0]) - 1][COLUNA_REFERENCIA.index(movimento[1])] != turno:
+        if int(inicial[0]) - 1 > int(movimento[0]) - 1:
+            if COLUNA_REFERENCIA.index(inicial[1]) > COLUNA_REFERENCIA.index(movimento[1]):
+                x = (int(inicial[0]) - 1) - (int(movimento[0]) - 1)
+                v = int(movimento[0])
+                for i in range(COLUNA_REFERENCIA.index(movimento[1]) + 1, COLUNA_REFERENCIA.index(inicial[1])):
+                    if tabuleiro_cores[v][i] != ESPACO:
+                        cont += 1
+                    v += 1
+                if cont == 0:
+                    if COLUNA_REFERENCIA.index(inicial[1]) - x == COLUNA_REFERENCIA.index(movimento[1]):
+                        v = True
+
+            elif COLUNA_REFERENCIA.index(inicial[1]) < COLUNA_REFERENCIA.index(movimento[1]):
+                x = (int(inicial[0]) - 1) - (int(movimento[0]) - 1)
+                v = int(movimento[0])
+                for i in range(COLUNA_REFERENCIA.index(movimento[1]) - 1, COLUNA_REFERENCIA.index(inicial[1]),
+                               -1):
+                    if tabuleiro_cores[v][i] != ESPACO:
+                        cont += 1
+                    v += 1
+                if cont == 0:
+                    if COLUNA_REFERENCIA.index(inicial[1]) + x == COLUNA_REFERENCIA.index(movimento[1]):
+                        v = True
+
+        elif int(inicial[0]) - 1 < int(movimento[0]) - 1:
+            if COLUNA_REFERENCIA.index(inicial[1]) > COLUNA_REFERENCIA.index(movimento[1]):
+                x = (int(movimento[0]) - 1) - (int(inicial[0]) - 1)
+                v = int(inicial[0])
+                for i in range(COLUNA_REFERENCIA.index(inicial[1]) - 1, COLUNA_REFERENCIA.index(movimento[1]),
+                               -1):
+                    if tabuleiro_cores[v][i] != ESPACO:
+                        cont += 1
+                    v += 1
+                if cont == 0:
+                    if COLUNA_REFERENCIA.index(inicial[1]) - x == COLUNA_REFERENCIA.index(movimento[1]):
+                        v = True
+
+            elif COLUNA_REFERENCIA.index(inicial[1]) < COLUNA_REFERENCIA.index(movimento[1]):
+                x = (int(movimento[0]) - 1) - (int(inicial[0]) - 1)
+                v = int(inicial[0])
+                for i in range(COLUNA_REFERENCIA.index(inicial[1]) + 1, COLUNA_REFERENCIA.index(movimento[1])):
+                    if tabuleiro_cores[v][i] != ESPACO:
+                        cont += 1
+                    v += 1
+                if cont == 0:
+                    if COLUNA_REFERENCIA.index(inicial[1]) + x == COLUNA_REFERENCIA.index(movimento[1]):
+                        v = True
+
+    if v:
+        return True
+
+
+def mover_peça(peça, inicial, movimento, turno):
+    global tabuleiro
+    global tabuleiro_cores
+
+    tabuleiro[int(inicial[0]) - 1][COLUNA_REFERENCIA.index(inicial[1])] = ESPACO
+    tabuleiro_cores[int(inicial[0]) - 1][COLUNA_REFERENCIA.index(inicial[1])] = ESPACO
+    tabuleiro_cores[int(movimento[0]) - 1][COLUNA_REFERENCIA.index(movimento[1])] = turno
+
+    if peça == "peão":
+        if turno == VERDES:
+            tabuleiro[int(movimento[0]) - 1][COLUNA_REFERENCIA.index(movimento[1])] = PEAO_V
+        else:
+            tabuleiro[int(movimento[0]) - 1][COLUNA_REFERENCIA.index(movimento[1])] = PEAO_A
+
+    elif peça == "cavalo":
+        if turno == VERDES:
+            tabuleiro[int(movimento[0]) - 1][COLUNA_REFERENCIA.index(movimento[1])] = CAVALO_V
+        else:
+            tabuleiro[int(movimento[0]) - 1][COLUNA_REFERENCIA.index(movimento[1])] = CAVALO_A
+
+    elif peça == "torre":
+        if turno == VERDES:
+            tabuleiro[int(movimento[0]) - 1][COLUNA_REFERENCIA.index(movimento[1])] = TORRE_V
+        else:
+            tabuleiro[int(movimento[0]) - 1][COLUNA_REFERENCIA.index(movimento[1])] = TORRE_A
+
+    elif peça == "rei":
+        if turno == VERDES:
+            tabuleiro[int(movimento[0]) - 1][COLUNA_REFERENCIA.index(movimento[1])] = REI_V
+        else:
+            tabuleiro[int(movimento[0]) - 1][COLUNA_REFERENCIA.index(movimento[1])] = REI_A
+
+    elif peça == "bispo":
+        if turno == VERDES:
+            tabuleiro[int(movimento[0]) - 1][COLUNA_REFERENCIA.index(movimento[1])] = BISPO_V
+        else:
+            tabuleiro[int(movimento[0]) - 1][COLUNA_REFERENCIA.index(movimento[1])] = BISPO_A
+
+    elif peça == "rainha":
+        if turno == VERDES:
+            tabuleiro[int(movimento[0]) - 1][COLUNA_REFERENCIA.index(movimento[1])] = RAINHA_V
+        else:
+            tabuleiro[int(movimento[0]) - 1][COLUNA_REFERENCIA.index(movimento[1])] = RAINHA_A
+
+
+tabuleiro = []
+tabuleiro_cores = []
