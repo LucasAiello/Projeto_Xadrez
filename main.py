@@ -1,6 +1,94 @@
 from constantes import *
 
 
+def verificar_horizontal_vertical(i, j):
+    for l in range(TAMANHO_TABULEIRO):
+        if l > 0:
+            if i - l >= 0:
+                if tabuleiro_cores[i - l][j] == ESPACO:
+                    tabuleiro_captura_verdes[i - l][j] = 1
+                elif tabuleiro_cores[i - l][j] == AZUIS:
+                    tabuleiro_captura_verdes[i - l][j] = 1
+                    break
+                else:
+                    break
+
+    for l in range(TAMANHO_TABULEIRO):
+        if l > 0:
+            if i + l < TAMANHO_TABULEIRO:
+                if tabuleiro_cores[i + l][j] == ESPACO:
+                    tabuleiro_captura_verdes[i + l][j] = 1
+                elif tabuleiro_cores[i + l][j] == AZUIS:
+                    tabuleiro_captura_verdes[i + l][j] = 1
+                    break
+                else:
+                    break
+
+    for l in range(TAMANHO_TABULEIRO):
+        if l > 0:
+            if j - l >= 0:
+                if tabuleiro_cores[i][j - l] == ESPACO:
+                    tabuleiro_captura_verdes[i][j - l] = 1
+                elif tabuleiro_cores[i][j - l] == AZUIS:
+                    tabuleiro_captura_verdes[i][j - l] = 1
+                    break
+                else:
+                    break
+
+    for l in range(TAMANHO_TABULEIRO):
+        if l > 0:
+            if j + l < TAMANHO_TABULEIRO:
+                if tabuleiro_cores[i][j + l] == ESPACO:
+                    tabuleiro_captura_verdes[i][j + l] = 1
+                elif tabuleiro_cores[i][j + l] == AZUIS:
+                    tabuleiro_captura_verdes[i][j + l] = 1
+                    break
+                else:
+                    break
+
+
+def verificar_diagonal(i, j):
+    for l in range(1, TAMANHO_TABULEIRO):
+        if i - l >= 0 and j - l >= 0:
+            if tabuleiro[i - l][j - l] == ESPACO:
+                tabuleiro_captura_verdes[i - l][j - l] = 1
+            elif tabuleiro_cores[i - l][j - l] == AZUIS:
+                tabuleiro_captura_verdes[i - l][j - l] = 1
+                break
+            else:
+                break
+
+    for l in range(1, TAMANHO_TABULEIRO):
+        if i + l < TAMANHO_TABULEIRO and j + l < TAMANHO_TABULEIRO:
+            if tabuleiro[i + l][j + l] == ESPACO:
+                tabuleiro_captura_verdes[i + l][j + l] = 1
+            elif tabuleiro_cores[i + l][j + l] == AZUIS:
+                tabuleiro_captura_verdes[i + l][j + l] = 1
+                break
+            else:
+                break
+
+    for l in range(1, TAMANHO_TABULEIRO):
+        if i + l < TAMANHO_TABULEIRO and j - l >= 0:
+            if tabuleiro[i + l][j - l] == ESPACO:
+                tabuleiro_captura_verdes[i + l][j - l] = 1
+            elif tabuleiro_cores[i + l][j - l] == AZUIS:
+                tabuleiro_captura_verdes[i + l][j - l] = 1
+                break
+            else:
+                break
+
+    for l in range(1, TAMANHO_TABULEIRO):
+        if i - l >= 0 and j + l < TAMANHO_TABULEIRO:
+            if tabuleiro[i - l][j + l] == ESPACO:
+                tabuleiro_captura_verdes[i - l][j + l] = 1
+            elif tabuleiro_cores[i - l][j + l] == AZUIS:
+                tabuleiro_captura_verdes[i - l][j + l] = 1
+                break
+            else:
+                break
+
+
 def montando_tabuleiro():
     global tabuleiro
     pecas_brancas = [TORRE_V, CAVALO_V, BISPO_V, RAINHA_V, REI_V, BISPO_V, CAVALO_V, TORRE_V]
@@ -36,6 +124,55 @@ def criar_referencia_cor():
             else:
                 linha.append(ESPACO)
         tabuleiro_cores.append(linha)
+
+
+def atualizar_referencia_captura_verdes():
+    global tabuleiro
+    global tabuleiro_captura_verdes
+
+    tabuleiro_captura_verdes = [[0 for x in range(TAMANHO_TABULEIRO)] for y in range(TAMANHO_TABULEIRO)]
+
+    for i in range(TAMANHO_TABULEIRO):
+        for j in range(TAMANHO_TABULEIRO):
+            if tabuleiro_cores[i][j] == VERDES:
+
+                if tabuleiro[i][j] == PEAO_V:
+                    if i - 1 >= 0 and j + 1 < TAMANHO_TABULEIRO:
+                        if tabuleiro_cores[i - 1][j + 1] != VERDES:
+                            tabuleiro_captura_verdes[i - 1][j + 1] = 1
+                    if i - 1 >= 0 and j - 1 >= 0:
+                        if tabuleiro_cores[i - 1][j - 1] != VERDES:
+                            tabuleiro_captura_verdes[i - 1][j - 1] = 1
+
+                elif tabuleiro[i][j] == BISPO_V:
+                    verificar_diagonal(i, j)
+
+                elif tabuleiro[i][j] == CAVALO_V:
+                    for l in range(-2, 3):
+                        if l != 0:
+                            for c in range(-2, 3):
+                                if c != 0:
+                                    if c != l and c != l*-1:
+                                        if i+l >= 0 and i+l < TAMANHO_TABULEIRO:
+                                            if j+c >= 0 and j+c < TAMANHO_TABULEIRO:
+                                                if tabuleiro_cores[i+l][j+c] != VERDES:
+                                                    tabuleiro_captura_verdes[i+l][j+c] = 1
+
+                elif tabuleiro[i][j] == TORRE_V:
+                    verificar_horizontal_vertical(i, j)
+
+                elif tabuleiro[i][j] == REI_V:
+                    for l in range(-1, 2):
+                        for c in range(-1, 2):
+                            if i+l >= 0 and i+l < TAMANHO_TABULEIRO:
+                                if j + c >= 0 and j + c < TAMANHO_TABULEIRO:
+                                    if not(l == 0 and c == 0):
+                                        if tabuleiro_cores[i+l][j+c] != VERDES:
+                                            tabuleiro_captura_verdes[i+l][j+c] = 1
+
+                elif tabuleiro[i][j] == RAINHA_V:
+                    verificar_horizontal_vertical(i, j)
+                    verificar_diagonal(i, j)
 
 
 def imprime_tabuleiro():
@@ -82,44 +219,44 @@ def verificar_peao():
     global posi_atual_p
     global movimento_p
 
-    valido = False
+    v = False
 
     if movimento_p[1] == posi_atual_p[1]:
         if int(movimento_p[0]) == int(posi_atual_p[0]) - 1:
             if tabuleiro_cores[int(movimento_p[0]) - 1][COLUNA_REFERENCIA.index(movimento_p[1])] == ESPACO:
-                valido = True
+                v = True
 
         elif int(movimento_p[0]) == int(posi_atual_p[0]) - 2 and int(posi_atual_p[0]) == 7:
             if tabuleiro_cores[int(movimento_p[0])][COLUNA_REFERENCIA.index(movimento_p[1])] == ESPACO:
-                valido = True
+                v = True
 
     elif COLUNA_REFERENCIA.index(posi_atual_p[1]) == COLUNA_REFERENCIA.index(movimento_p[1]) + 1 or \
             COLUNA_REFERENCIA.index(posi_atual_p[1]) == COLUNA_REFERENCIA.index(movimento_p[1]) - 1:
         if int(movimento_p[0]) == int(posi_atual_p[0]) - 1 and tabuleiro_cores[int(movimento_p[0]) - 1] \
                 [COLUNA_REFERENCIA.index(movimento_p[1])] == AZUIS:
-            valido = True
+            v = True
 
     if movimento_p[1] == posi_atual_p[1]:
         if int(movimento_p[0]) == int(posi_atual_p[0]) + 1:
             if tabuleiro_cores[int(movimento_p[0]) - 1][COLUNA_REFERENCIA.index(movimento_p[1])] == ESPACO:
-                valido = True
+                v = True
 
         elif int(movimento_p[0]) == int(posi_atual_p[0]) + 2 and int(posi_atual_p[0]) == 2:
             if tabuleiro_cores[int(movimento_p[0]) - 2][COLUNA_REFERENCIA.index(movimento_p[1])] == ESPACO:
-                valido = True
+                v = True
 
     elif COLUNA_REFERENCIA.index(posi_atual_p[1]) == COLUNA_REFERENCIA.index(movimento_p[1]) + 1 or \
             COLUNA_REFERENCIA.index(posi_atual_p[1]) == COLUNA_REFERENCIA.index(movimento_p[1]) - 1:
         if int(movimento_p[0]) == int(posi_atual_p[0]) + 1 and tabuleiro_cores[int(movimento_p[0]) - 1] \
                 [COLUNA_REFERENCIA.index(movimento_p[1])] == VERDES:
-            valido = True
+            v = True
 
-    if valido:
+    if v:
         return True
 
 
 def verificar_cavalo():
-    valido = False
+    v = False
     if tabuleiro_cores[int(movimento_p[0]) - 1][COLUNA_REFERENCIA.index(movimento_p[1])] != turno:
         for i in range(-2, 3, 4):
             for j in range(-1, 2, 2):
@@ -127,16 +264,17 @@ def verificar_cavalo():
                         movimento_p[1]) == COLUNA_REFERENCIA.index(posi_atual_p[1]) + j) or \
                         (int(movimento_p[0]) == int(posi_atual_p[0]) + j and COLUNA_REFERENCIA.index(
                             movimento_p[1]) == COLUNA_REFERENCIA.index(posi_atual_p[1]) + i):
-                    valido = True
+                    v = True
 
-    if valido:
+    if v:
         return True
 
 
 def verificar_torre():
     global posi_atual_p
     global movimento_p
-    valido = False
+
+    v = False
     cont = 0
 
     if tabuleiro_cores[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] == turno and \
@@ -152,7 +290,7 @@ def verificar_torre():
                         cont += 1
 
             if cont == abs(COLUNA_REFERENCIA.index(posi_atual_p[1]) - COLUNA_REFERENCIA.index(movimento_p[1])) - 1:
-                valido = True
+                v = True
 
         elif posi_atual_p[1] == movimento_p[1]:
             if int(posi_atual_p[0]) > int(movimento_p[0]):
@@ -165,34 +303,34 @@ def verificar_torre():
                         cont += 1
 
             if cont == abs(int(posi_atual_p[0]) - int(movimento_p[0])) - 1:
-                valido = True
+                v = True
 
-    if valido:
+    if v:
         return True
 
 
 def verificar_rei():
-    valido = False
+    v = False
 
     if tabuleiro_cores[int(movimento_p[0]) - 1][COLUNA_REFERENCIA.index(movimento_p[1])] != turno:
         if tabuleiro_cores[int(posi_atual_p[0]) - 1] == tabuleiro_cores[int(movimento_p[0]) - 1] or (
                 tabuleiro_cores[int(posi_atual_p[0]) - 1] == tabuleiro_cores[int(movimento_p[0])]) or \
                 tabuleiro_cores[int(posi_atual_p[0]) - 1] == tabuleiro_cores[int(movimento_p[0]) - 2]:
             if COLUNA_REFERENCIA.index(posi_atual_p[1]) == COLUNA_REFERENCIA.index(movimento_p[1]):
-                valido = True
+                v = True
 
             elif COLUNA_REFERENCIA.index(posi_atual_p[1]) == COLUNA_REFERENCIA.index(movimento_p[1]) + 1:
-                valido = True
+                v = True
 
             elif COLUNA_REFERENCIA.index(posi_atual_p[1]) == COLUNA_REFERENCIA.index(movimento_p[1]) - 1:
-                valido = True
+                v = True
 
-    if valido:
+    if v:
         return True
 
 
 def verificar_bispo():
-    valido = False
+    v = False
     cont = 0
     if tabuleiro_cores[int(movimento_p[0]) - 1][COLUNA_REFERENCIA.index(movimento_p[1])] != turno:
         if int(posi_atual_p[0]) - 1 > int(movimento_p[0]) - 1:
@@ -205,7 +343,7 @@ def verificar_bispo():
                     v += 1
                 if cont == 0:
                     if COLUNA_REFERENCIA.index(posi_atual_p[1]) - x == COLUNA_REFERENCIA.index(movimento_p[1]):
-                        valido = True
+                        v = True
 
             elif COLUNA_REFERENCIA.index(posi_atual_p[1]) < COLUNA_REFERENCIA.index(movimento_p[1]):
                 x = (int(posi_atual_p[0]) - 1) - (int(movimento_p[0]) - 1)
@@ -217,7 +355,7 @@ def verificar_bispo():
                     v += 1
                 if cont == 0:
                     if COLUNA_REFERENCIA.index(posi_atual_p[1]) + x == COLUNA_REFERENCIA.index(movimento_p[1]):
-                        valido = True
+                        v = True
 
         elif int(posi_atual_p[0]) - 1 < int(movimento_p[0]) - 1:
             if COLUNA_REFERENCIA.index(posi_atual_p[1]) > COLUNA_REFERENCIA.index(movimento_p[1]):
@@ -230,7 +368,7 @@ def verificar_bispo():
                     v += 1
                 if cont == 0:
                     if COLUNA_REFERENCIA.index(posi_atual_p[1]) - x == COLUNA_REFERENCIA.index(movimento_p[1]):
-                        valido = True
+                        v = True
 
             elif COLUNA_REFERENCIA.index(posi_atual_p[1]) < COLUNA_REFERENCIA.index(movimento_p[1]):
                 x = (int(movimento_p[0]) - 1) - (int(posi_atual_p[0]) - 1)
@@ -241,9 +379,9 @@ def verificar_bispo():
                     v += 1
                 if cont == 0:
                     if COLUNA_REFERENCIA.index(posi_atual_p[1]) + x == COLUNA_REFERENCIA.index(movimento_p[1]):
-                        valido = True
+                        v = True
 
-    if valido:
+    if v:
         return True
 
 
@@ -376,12 +514,18 @@ turno = VERDES
 valido = False
 tabuleiro = []
 tabuleiro_cores = []
+tabuleiro_captura_verdes = []
 
 montando_tabuleiro()
 criar_referencia_cor()
 
 while True:
+    atualizar_referencia_captura_verdes()
     imprime_tabuleiro()
+
+    for i in range(TAMANHO_TABULEIRO):
+        print(*tabuleiro_captura_verdes[i])
+
     print(MSG_TURNO.format(turno.upper()))
     coordenada_jogada = input()
 
