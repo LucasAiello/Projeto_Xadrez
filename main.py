@@ -369,7 +369,7 @@ def criar_posis(coordenada):
     global posi_atual_p
     global movimento_p
 
-    if len(coordenada) == 5 and coordenada[2 == " "]:
+    if len(coordenada) == 5 and coordenada[2] == " ":
         posi_atual_p = coordenada[:2].lower()
         movimento_p = coordenada[3:].lower()
     elif len(coordenada) == 4:
@@ -378,6 +378,12 @@ def criar_posis(coordenada):
     else:
         return False
 
+
+def verificar_xeque():
+    if tabuleiro_captura_azuis[posis_reis[0][0]][posis_reis[0][1]] == 1:
+        return True
+    if tabuleiro_captura_verdes[posis_reis[1][0]][posis_reis[1][1]] == 1:
+        return True
 
 
 valido = False
@@ -393,15 +399,9 @@ criar_referencia_cor()
 while True:
     atualizar_referencia_captura(AZUIS)
     atualizar_referencia_captura(VERDES)
+    if verificar_xeque():
+        print(MSG_XEQUE)
     imprime_tabuleiro()
-
-    for i in range(TAMANHO_TABULEIRO):
-        print(*tabuleiro_captura_verdes[i])
-
-    print()
-
-    for i in range(TAMANHO_TABULEIRO):
-        print(*tabuleiro_captura_azuis[i])
 
     print(MSG_TURNO.format(turno.upper()))
     coordenada_jogada = input()

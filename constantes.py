@@ -2,6 +2,7 @@ MSG_MOVIMENTO_INVALIDO = "{} não pode fazer esse movimento! Insira outro comand
 MSG_ESPAÇO_VAZIO = "Não há peça da sua cor no local indicado. Insira outro comando!"
 MSG_COMANDO_INVALIDO = "Comando invalido. Tente novamente!"
 MSG_TURNO = " "*12 + "TURNO DAS {}"
+MSG_XEQUE = " "*18 + "XEQUE!\n"
 
 AZUIS = "azuis"
 VERDES = "verdes"
