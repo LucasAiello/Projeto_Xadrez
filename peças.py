@@ -130,9 +130,12 @@ def verificar_bispo(inicial, movimento, turno):
             v = int(movimento[0])
             for i in range(COLUNA_REFERENCIA.index(movimento[1]) - 1, COLUNA_REFERENCIA.index(inicial[1]),
                            -1):
-                if tabuleiro_cores[v][i] != ESPACO:
-                    cont += 1
-                v += 1
+                try:
+                    if tabuleiro_cores[v][i] != ESPACO:
+                        cont += 1
+                    v += 1
+                except IndexError:
+                    pass
             if cont == 0:
                 if COLUNA_REFERENCIA.index(inicial[1]) + x == COLUNA_REFERENCIA.index(movimento[1]):
                     val = True
