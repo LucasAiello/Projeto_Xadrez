@@ -1,38 +1,37 @@
 from constantes import *
 
 
-def verificar_peao(inicial, movimento):
+def verificar_peao(inicial, movimento, turno):
     v = False
 
-    if movimento[1] == inicial[1]:
-        if int(movimento[0]) == int(inicial[0]) - 1:
-            if tabuleiro_cores[int(movimento[0]) - 1][COLUNA_REFERENCIA.index(movimento[1])] == ESPACO:
-                v = True
-
-        elif int(movimento[0]) == int(inicial[0]) - 2 and int(inicial[0]) == 7:
-            if tabuleiro_cores[int(movimento[0])][COLUNA_REFERENCIA.index(movimento[1])] == ESPACO:
-                v = True
-
-    elif COLUNA_REFERENCIA.index(inicial[1]) == COLUNA_REFERENCIA.index(movimento[1]) + 1 or \
-            COLUNA_REFERENCIA.index(inicial[1]) == COLUNA_REFERENCIA.index(movimento[1]) - 1:
-        if int(movimento[0]) == int(inicial[0]) - 1 and tabuleiro_cores[int(movimento[0]) - 1] \
-                [COLUNA_REFERENCIA.index(movimento[1])] == AZUIS:
-            v = True
-
-    if movimento[1] == inicial[1]:
-        if int(movimento[0]) == int(inicial[0]) + 1:
-            if tabuleiro_cores[int(movimento[0]) - 1][COLUNA_REFERENCIA.index(movimento[1])] == ESPACO:
-                v = True
-
-        elif int(movimento[0]) == int(inicial[0]) + 2 and int(inicial[0]) == 2:
-            if tabuleiro_cores[int(movimento[0]) - 2][COLUNA_REFERENCIA.index(movimento[1])] == ESPACO:
-                v = True
-
-    elif COLUNA_REFERENCIA.index(inicial[1]) == COLUNA_REFERENCIA.index(movimento[1]) + 1 or \
-            COLUNA_REFERENCIA.index(inicial[1]) == COLUNA_REFERENCIA.index(movimento[1]) - 1:
-        if int(movimento[0]) == int(inicial[0]) + 1 and tabuleiro_cores[int(movimento[0]) - 1] \
-                [COLUNA_REFERENCIA.index(movimento[1])] == VERDES:
-            v = True
+    if turno == VERDES:
+        if COLUNA_REFERENCIA.index(inicial[1]) == COLUNA_REFERENCIA.index(movimento[1]):
+            if tabuleiro[int(movimento[0])-1][COLUNA_REFERENCIA.index(movimento[1])] == ESPACO:
+                if int(inicial[0])-1 == 6 and int(inicial[0])-2 == int(movimento[0]):
+                        v = True
+                elif int(inicial[0])-1 == int(movimento[0]):
+                        v = True
+        else:
+            if COLUNA_REFERENCIA.index(movimento[1]) == COLUNA_REFERENCIA.index(inicial[1])-1:
+                if tabuleiro_cores[int(movimento[0])-1][COLUNA_REFERENCIA.index(movimento[1])] == AZUIS:
+                    v = True
+            elif COLUNA_REFERENCIA.index(movimento[1]) == COLUNA_REFERENCIA.index(inicial[1])+1:
+                if tabuleiro_cores[int(movimento[0]) - 1][COLUNA_REFERENCIA.index(movimento[1])] == AZUIS:
+                    v = True
+    else:
+        if COLUNA_REFERENCIA.index(inicial[1]) == COLUNA_REFERENCIA.index(movimento[1]):
+            if tabuleiro[int(movimento[0])-1][COLUNA_REFERENCIA.index(movimento[1])] == ESPACO:
+                if int(inicial[0])-1 == 1 and int(inicial[0])+2 == int(movimento[0]):
+                        v = True
+                elif int(inicial[0]) == int(movimento[0])-1:
+                        v = True
+        else:
+            if COLUNA_REFERENCIA.index(movimento[1]) == COLUNA_REFERENCIA.index(inicial[1])-1:
+                if tabuleiro_cores[int(movimento[0])-1][COLUNA_REFERENCIA.index(movimento[1])] == VERDES:
+                    v = True
+            elif COLUNA_REFERENCIA.index(movimento[1]) == COLUNA_REFERENCIA.index(inicial[1])+1:
+                if tabuleiro_cores[int(movimento[0]) - 1][COLUNA_REFERENCIA.index(movimento[1])] == VERDES:
+                    v = True
 
     if v:
         return True
@@ -174,25 +173,25 @@ def mover_peça(peça, inicial, movimento, turno):
     tabuleiro_cores[int(inicial[0]) - 1][COLUNA_REFERENCIA.index(inicial[1])] = ESPACO
     tabuleiro_cores[int(movimento[0]) - 1][COLUNA_REFERENCIA.index(movimento[1])] = turno
 
-    if peça == "peão":
+    if peça == P_PEAO:
         if turno == VERDES:
             tabuleiro[int(movimento[0]) - 1][COLUNA_REFERENCIA.index(movimento[1])] = PEAO_V
         else:
             tabuleiro[int(movimento[0]) - 1][COLUNA_REFERENCIA.index(movimento[1])] = PEAO_A
 
-    elif peça == "cavalo":
+    elif peça == P_CAVALO:
         if turno == VERDES:
             tabuleiro[int(movimento[0]) - 1][COLUNA_REFERENCIA.index(movimento[1])] = CAVALO_V
         else:
             tabuleiro[int(movimento[0]) - 1][COLUNA_REFERENCIA.index(movimento[1])] = CAVALO_A
 
-    elif peça == "torre":
+    elif peça == P_TORRE:
         if turno == VERDES:
             tabuleiro[int(movimento[0]) - 1][COLUNA_REFERENCIA.index(movimento[1])] = TORRE_V
         else:
             tabuleiro[int(movimento[0]) - 1][COLUNA_REFERENCIA.index(movimento[1])] = TORRE_A
 
-    elif peça == "rei":
+    elif peça == P_REI:
         if turno == VERDES:
             tabuleiro[int(movimento[0]) - 1][COLUNA_REFERENCIA.index(movimento[1])] = REI_V
             posis_reis[0][0] = int(movimento[0]) - 1
@@ -202,13 +201,13 @@ def mover_peça(peça, inicial, movimento, turno):
             posis_reis[1][0] = int(movimento[0]) - 1
             posis_reis[1][1] = COLUNA_REFERENCIA.index(movimento[1])
 
-    elif peça == "bispo":
+    elif peça == P_BISPO:
         if turno == VERDES:
             tabuleiro[int(movimento[0]) - 1][COLUNA_REFERENCIA.index(movimento[1])] = BISPO_V
         else:
             tabuleiro[int(movimento[0]) - 1][COLUNA_REFERENCIA.index(movimento[1])] = BISPO_A
 
-    elif peça == "rainha":
+    elif peça == P_RAINHA:
         if turno == VERDES:
             tabuleiro[int(movimento[0]) - 1][COLUNA_REFERENCIA.index(movimento[1])] = RAINHA_V
         else:

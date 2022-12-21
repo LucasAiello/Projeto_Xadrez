@@ -3,6 +3,11 @@ MSG_ESPAÇO_VAZIO = "Não há peça da sua cor no local indicado. Insira outro c
 MSG_COMANDO_INVALIDO = "Comando invalido. Tente novamente!"
 MSG_TURNO = " "*12 + "TURNO DAS {}"
 MSG_XEQUE = " "*18 + "XEQUE!\n"
+MSG_TUTORIAL5 = "Presione ENTER para começar."
+MSG_TUTORIAL4 = "EX: 7e 6e, 7E5E, 7E 5E ou 7e5e\n"
+MSG_TUTORIAL3 = "Em seguida coloque o númera da linha com a letra da coluna do movimento desejado.\n"
+MSG_TUTORIAL2 = "Informe o número da linha com a letra da coluna da peça a ser movida;\n"
+MSG_TUTORIAL1 = "\nPara jogar entre com comandos na seguinte ordem:\n"
 
 AZUIS = "azuis"
 VERDES = "verdes"
@@ -28,5 +33,18 @@ BISPO_A = '\033[34m\u265d\033[m'
 CAVALO_A = '\033[34m\u265e\033[m'
 PEAO_A = '\033[34m\u2659\033[m'
 
+P_REI = "O rei"
+P_RAINHA = "A rainha"
+P_BISPO = "O bispo"
+P_TORRE = "A torre"
+P_CAVALO = "O cavalo"
+P_PEAO = "O peão"
+
 COLUNA_TABULEIRO = [' ', 'a ', ' b', '  c', '  d', '  e', '  f ', ' g', '  h']
 COLUNA_REFERENCIA = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+
+AREA_XEQUE = 2
+CAPTURA = 1
+MOV_CAPTURA_PEAO = 7
+MOVIMENTO_PEAO = 4
+CAPTURA_PEAO = 3
