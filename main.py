@@ -1,6 +1,8 @@
 from tabuleiro import *
 from time import sleep
 
+PEÇA_XEQUE = "X"
+
 
 def atualizar_referencia_captura(cor):
     global tabuleiro
@@ -19,19 +21,27 @@ def atualizar_referencia_captura(cor):
                     elif tabuleiro_cores[i + l][j] == cor:
                         if cor == VERDES:
                             if tabuleiro[i + l][j] != REI_V:
-                                tabuleiro_captura_verdes[i + l][j] = CAPTURA
+                                if tabuleiro_captura_verdes[i + l][j] == PEÇA_XEQUE:
+                                    tabuleiro_captura_verdes[i + l][j] = AREA_XEQUE
+                                else:
+                                    tabuleiro_captura_verdes[i + l][j] = CAPTURA
                                 break
                         else:
                             if tabuleiro[i + l][j] != REI_A:
-                                tabuleiro_captura_azuis[i + l][j] = CAPTURA
+                                if tabuleiro_captura_azuis[i + l][j] == PEÇA_XEQUE:
+                                    tabuleiro_captura_azuis[i + l][j] = AREA_XEQUE
+                                else:
+                                    tabuleiro_captura_azuis[i + l][j] = CAPTURA
                                 break
                     elif (cor == VERDES and tabuleiro[i + l][j] == REI_A) or (
                             cor == AZUIS and tabuleiro[i + l][j] == REI_V):
-                        for k in range(0, l+1):
+                        for k in range(1, l+1):
                             if cor == VERDES:
                                 tabuleiro_captura_verdes[i + k][j] = AREA_XEQUE
+                                tabuleiro_captura_verdes[i][j] = PEÇA_XEQUE
                             else:
                                 tabuleiro_captura_azuis[i + k][j] = AREA_XEQUE
+                                tabuleiro_captura_azuis[i][j] = PEÇA_XEQUE
                         break
                     else:
                         if cor == VERDES:
@@ -52,19 +62,27 @@ def atualizar_referencia_captura(cor):
                     elif tabuleiro_cores[i - l][j] == cor:
                         if cor == VERDES:
                             if tabuleiro[i - l][j] != REI_V:
-                                tabuleiro_captura_verdes[i - l][j] = CAPTURA
+                                if tabuleiro_captura_verdes[i - l][j] == PEÇA_XEQUE:
+                                    tabuleiro_captura_verdes[i - l][j] = AREA_XEQUE
+                                else:
+                                    tabuleiro_captura_verdes[i - l][j] = CAPTURA
                                 break
                         else:
                             if tabuleiro[i - l][j] != REI_A:
-                                tabuleiro_captura_azuis[i - l][j] = CAPTURA
+                                if tabuleiro_captura_azuis[i - l][j] == PEÇA_XEQUE:
+                                    tabuleiro_captura_azuis[i - l][j] = AREA_XEQUE
+                                else:
+                                    tabuleiro_captura_azuis[i - l][j] = CAPTURA
                                 break
                     elif (cor == VERDES and tabuleiro[i - l][j] == REI_A) or (
                             cor == AZUIS and tabuleiro[i - l][j] == REI_V):
-                        for k in range(0, l + 1):
+                        for k in range(1, l + 1):
                             if cor == VERDES:
                                 tabuleiro_captura_verdes[i - k][j] = AREA_XEQUE
+                                tabuleiro_captura_verdes[i][j] = PEÇA_XEQUE
                             else:
                                 tabuleiro_captura_azuis[i - k][j] = AREA_XEQUE
+                                tabuleiro_captura_azuis[i][j] = PEÇA_XEQUE
                         break
                     else:
                         if cor == VERDES:
@@ -85,19 +103,27 @@ def atualizar_referencia_captura(cor):
                     elif tabuleiro_cores[i][j + l] == cor:
                         if cor == VERDES:
                             if tabuleiro[i][j + l] != REI_V:
-                                tabuleiro_captura_verdes[i][j + l] = CAPTURA
+                                if tabuleiro_captura_verdes[i][j + l] == PEÇA_XEQUE:
+                                    tabuleiro_captura_verdes[i][j + l] = AREA_XEQUE
+                                else:
+                                    tabuleiro_captura_verdes[i][j + l] = CAPTURA
                                 break
                         else:
                             if tabuleiro[i][j + l] != REI_A:
-                                tabuleiro_captura_azuis[i][j + l] = CAPTURA
+                                if tabuleiro_captura_azuis[i][j + l] == PEÇA_XEQUE:
+                                    tabuleiro_captura_azuis[i][j + l] = AREA_XEQUE
+                                else:
+                                    tabuleiro_captura_azuis[i][j + l] = CAPTURA
                                 break
                     elif (cor == VERDES and tabuleiro[i][j + l] == REI_A) or (
                             cor == AZUIS and tabuleiro[i][j + l] == REI_V):
-                        for k in range(0, l + 1):
+                        for k in range(1, l + 1):
                             if cor == VERDES:
                                 tabuleiro_captura_verdes[i][j + k] = AREA_XEQUE
+                                tabuleiro_captura_verdes[i][j] = PEÇA_XEQUE
                             else:
                                 tabuleiro_captura_azuis[i][j + k] = AREA_XEQUE
+                                tabuleiro_captura_azuis[i][j] = PEÇA_XEQUE
                         break
                     else:
                         if cor == VERDES:
@@ -118,19 +144,27 @@ def atualizar_referencia_captura(cor):
                     elif tabuleiro_cores[i][j - l] == cor:
                         if cor == VERDES:
                             if tabuleiro[i][j - l] != REI_V:
-                                tabuleiro_captura_verdes[i][j - l] = CAPTURA
+                                if tabuleiro_captura_verdes[i][j - l] == PEÇA_XEQUE:
+                                    tabuleiro_captura_verdes[i][j - l] = AREA_XEQUE
+                                else:
+                                    tabuleiro_captura_verdes[i][j - l] = CAPTURA
                                 break
                         else:
                             if tabuleiro[i][j - l] != REI_A:
-                                tabuleiro_captura_azuis[i][j - l] = CAPTURA
+                                if tabuleiro_captura_azuis[i][j - l] == PEÇA_XEQUE:
+                                    tabuleiro_captura_azuis[i][j - l] = AREA_XEQUE
+                                else:
+                                    tabuleiro_captura_azuis[i][j - l] = CAPTURA
                                 break
                     elif (cor == VERDES and tabuleiro[i][j - l] == REI_A) or (
                                     cor == AZUIS and tabuleiro[i][j - l] == REI_V):
-                        for k in range(0, l + 1):
+                        for k in range(1, l + 1):
                             if cor == VERDES:
                                 tabuleiro_captura_verdes[i][j - k] = AREA_XEQUE
+                                tabuleiro_captura_verdes[i][j] = PEÇA_XEQUE
                             else:
                                 tabuleiro_captura_azuis[i][j - k] = AREA_XEQUE
+                                tabuleiro_captura_azuis[i][j] = PEÇA_XEQUE
                         break
                     else:
                         if cor == VERDES:
@@ -153,20 +187,28 @@ def atualizar_referencia_captura(cor):
                     elif tabuleiro_cores[i + l][j + l] == cor:
                         if cor == VERDES:
                             if tabuleiro[i + l][j + l] != REI_V:
-                                tabuleiro_captura_verdes[i + l][j + l] = CAPTURA
+                                if tabuleiro_captura_verdes[i + l][j + l] == PEÇA_XEQUE:
+                                    tabuleiro_captura_verdes[i + l][j + l] = AREA_XEQUE
+                                else:
+                                    tabuleiro_captura_verdes[i + l][j + l] = CAPTURA
                             break
                         else:
                             if tabuleiro[i + l][j + l] != REI_A:
-                                tabuleiro_captura_azuis[i + l][j + l] = CAPTURA
+                                if tabuleiro_captura_azuis[i + l][j + l] == PEÇA_XEQUE:
+                                    tabuleiro_captura_azuis[i + l][j + l] = AREA_XEQUE
+                                else:
+                                    tabuleiro_captura_azuis[i + l][j + l] = CAPTURA
                             break
 
                     elif (cor == VERDES and tabuleiro[i + l][j + l] == REI_A) or (
                             cor == AZUIS and tabuleiro[i + l][j + l] == REI_V):
-                        for k in range(0, l+1):
+                        for k in range(1, l+1):
                             if cor == VERDES:
                                 tabuleiro_captura_verdes[i+k][j + k] = AREA_XEQUE
+                                tabuleiro_captura_verdes[i][j] = PEÇA_XEQUE
                             else:
                                 tabuleiro_captura_azuis[i+k][j + k] = AREA_XEQUE
+                                tabuleiro_captura_azuis[i][j] = PEÇA_XEQUE
                         break
                     else:
                         break
@@ -183,19 +225,27 @@ def atualizar_referencia_captura(cor):
                     elif tabuleiro_cores[i + l][j - l] == cor:
                         if cor == VERDES:
                             if tabuleiro[i + l][j - l] != REI_V:
-                                tabuleiro_captura_verdes[i + l][j - l] = CAPTURA
+                                if tabuleiro_captura_verdes[i + l][j - l] == PEÇA_XEQUE:
+                                    tabuleiro_captura_verdes[i + l][j - l] = AREA_XEQUE
+                                else:
+                                    tabuleiro_captura_verdes[i + l][j - l] = CAPTURA
                             break
                         else:
                             if tabuleiro[i + l][j - l] != REI_A:
-                                tabuleiro_captura_azuis[i + l][j - l] = CAPTURA
+                                if tabuleiro_captura_azuis[i + l][j - l] == PEÇA_XEQUE:
+                                    tabuleiro_captura_azuis[i + l][j - l] = AREA_XEQUE
+                                else:
+                                    tabuleiro_captura_azuis[i + l][j - l] = CAPTURA
                             break
                     elif (cor == VERDES and tabuleiro[i + l][j - l] == REI_A) or (
                             cor == AZUIS and tabuleiro[i + l][j - l] == REI_V):
-                        for k in range(0, l+1):
+                        for k in range(1, l+1):
                             if cor == VERDES:
                                 tabuleiro_captura_verdes[i+k][j - k] = AREA_XEQUE
+                                tabuleiro_captura_verdes[i][j] = PEÇA_XEQUE
                             else:
                                 tabuleiro_captura_azuis[i+k][j - k] = AREA_XEQUE
+                                tabuleiro_captura_azuis[i][j] = PEÇA_XEQUE
                         break
                     else:
                         break
@@ -212,19 +262,27 @@ def atualizar_referencia_captura(cor):
                     elif tabuleiro_cores[i - l][j + l] == cor:
                         if cor == VERDES:
                             if tabuleiro[i - l][j + l] != REI_V:
-                                tabuleiro_captura_verdes[i - l][j + l] = CAPTURA
+                                if tabuleiro_captura_verdes[i - l][j + l] == PEÇA_XEQUE:
+                                    tabuleiro_captura_verdes[i - l][j + l] = AREA_XEQUE
+                                else:
+                                    tabuleiro_captura_verdes[i - l][j + l] = CAPTURA
                             break
                         else:
                             if tabuleiro[i - l][j + l] != REI_A:
-                                tabuleiro_captura_azuis[i - l][j + l] = CAPTURA
+                                if tabuleiro_captura_azuis[i - l][j + l] == PEÇA_XEQUE:
+                                    tabuleiro_captura_azuis[i - l][j + l] = AREA_XEQUE
+                                else:
+                                    tabuleiro_captura_azuis[i - l][j + l] = CAPTURA
                             break
                     elif (cor == VERDES and tabuleiro[i - l][j + l] == REI_A) or (
                             cor == AZUIS and tabuleiro[i - l][j + l] == REI_V):
-                        for k in range(0, l+1):
+                        for k in range(1, l+1):
                             if cor == VERDES:
                                 tabuleiro_captura_verdes[i - k][j + k] = AREA_XEQUE
+                                tabuleiro_captura_verdes[i][j] = PEÇA_XEQUE
                             else:
                                 tabuleiro_captura_azuis[i - k][j + k] = AREA_XEQUE
+                                tabuleiro_captura_azuis[i][j] = PEÇA_XEQUE
                         break
                     else:
                         break
@@ -240,19 +298,27 @@ def atualizar_referencia_captura(cor):
                     elif tabuleiro_cores[i - l][j - l] == cor:
                         if cor == VERDES:
                             if tabuleiro[i - l][j - l] != REI_V:
-                                tabuleiro_captura_verdes[i - l][j - l] = CAPTURA
+                                if tabuleiro_captura_verdes[i - l][j - l] == PEÇA_XEQUE:
+                                    tabuleiro_captura_verdes[i - l][j - l] = AREA_XEQUE
+                                else:
+                                    tabuleiro_captura_verdes[i - l][j - l] = CAPTURA
                             break
                         else:
-                            if tabuleiro[i - l][j - l] != REI_V:
-                                tabuleiro_captura_azuis[i - l][j - l] = CAPTURA
+                            if tabuleiro[i - l][j - l] != REI_A:
+                                if tabuleiro_captura_azuis[i - l][j - l] == PEÇA_XEQUE:
+                                    tabuleiro_captura_azuis[i - l][j - l] = AREA_XEQUE
+                                else:
+                                    tabuleiro_captura_azuis[i - l][j - l] = CAPTURA
                             break
                     elif (cor == VERDES and tabuleiro[i - l][j - l] == REI_A) or (
                             cor == AZUIS and tabuleiro[i - l][j - l] == REI_V):
-                        for k in range(0, l+1):
+                        for k in range(1, l+1):
                             if cor == VERDES:
                                 tabuleiro_captura_verdes[i - k][j - k] = AREA_XEQUE
+                                tabuleiro_captura_verdes[i][j] = PEÇA_XEQUE
                             else:
                                 tabuleiro_captura_azuis[i - k][j - k] = AREA_XEQUE
+                                tabuleiro_captura_azuis[i][j] = PEÇA_XEQUE
                         break
 
                     else:
@@ -434,75 +500,81 @@ def jogar():
     valido = False
     peça_erro = "nenhum"
 
-    if (xeque and turno == VERDES and tabuleiro_captura_azuis[int(movimento_p[0])-1][COLUNA_REFERENCIA.index(movimento_p[1])] == AREA_XEQUE) or \
-        (xeque and turno == AZUIS and tabuleiro_captura_verdes[int(movimento_p[0]) - 1][COLUNA_REFERENCIA.index(movimento_p[1])] == AREA_XEQUE) or \
-            not xeque:
-        if tabuleiro[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] == PEAO_V and turno == VERDES or \
-                tabuleiro[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] == PEAO_A and turno == AZUIS:
+    if (tabuleiro[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] != REI_V and turno == VERDES) or \
+            (tabuleiro[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] != REI_A and turno == AZUIS):
+        if (xeque and turno == VERDES and tabuleiro_captura_azuis[int(movimento_p[0])-1][COLUNA_REFERENCIA.index(movimento_p[1])] == AREA_XEQUE) or \
+            (xeque and turno == AZUIS and tabuleiro_captura_verdes[int(movimento_p[0]) - 1][COLUNA_REFERENCIA.index(movimento_p[1])] == AREA_XEQUE) or \
+                not xeque or (xeque and turno == VERDES and tabuleiro_captura_azuis[int(movimento_p[0])-1][COLUNA_REFERENCIA.index(movimento_p[1])] == PEÇA_XEQUE) or \
+                    (xeque and turno == AZUIS and tabuleiro_captura_verdes[int(movimento_p[0]) - 1][COLUNA_REFERENCIA.index(movimento_p[1])] == PEÇA_XEQUE):
 
-            if verificar_peao(posi_atual_p, movimento_p, turno):
-                mover_peça(P_PEAO, posi_atual_p, movimento_p, turno)
-                valido = True
+            if tabuleiro[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] == PEAO_V and turno == VERDES or \
+                    tabuleiro[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] == PEAO_A and turno == AZUIS:
 
-            else:
-                peça_erro = P_PEAO
+                if verificar_peao(posi_atual_p, movimento_p, turno):
+                    mover_peça(P_PEAO, posi_atual_p, movimento_p, turno)
+                    valido = True
 
-        elif tabuleiro[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] == CAVALO_V and turno == VERDES or \
-                tabuleiro[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] == CAVALO_A and turno == AZUIS:
+                else:
+                    peça_erro = P_PEAO
 
-            if verificar_cavalo(posi_atual_p, movimento_p, turno):
-                mover_peça(P_CAVALO, posi_atual_p, movimento_p, turno)
-                valido = True
+            elif tabuleiro[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] == CAVALO_V and turno == VERDES or \
+                    tabuleiro[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] == CAVALO_A and turno == AZUIS:
 
-            else:
-                peça_erro = P_CAVALO
+                if verificar_cavalo(posi_atual_p, movimento_p, turno):
+                    mover_peça(P_CAVALO, posi_atual_p, movimento_p, turno)
+                    valido = True
 
-        elif tabuleiro[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] == TORRE_V and turno == VERDES or \
-                tabuleiro[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] == TORRE_A and turno == AZUIS:
+                else:
+                    peça_erro = P_CAVALO
 
-            if verificar_torre(posi_atual_p, movimento_p, turno):
-                mover_peça(P_TORRE, posi_atual_p, movimento_p, turno)
-                valido = True
+            elif tabuleiro[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] == TORRE_V and turno == VERDES or \
+                    tabuleiro[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] == TORRE_A and turno == AZUIS:
 
-            else:
-                peça_erro = P_TORRE
+                if verificar_torre(posi_atual_p, movimento_p, turno):
+                    mover_peça(P_TORRE, posi_atual_p, movimento_p, turno)
+                    valido = True
 
-        elif tabuleiro[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] == BISPO_V and turno == VERDES or \
-                tabuleiro[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] == BISPO_A and turno == AZUIS:
+                else:
+                    peça_erro = P_TORRE
 
-            if verificar_bispo(posi_atual_p, movimento_p, turno):
-                mover_peça(P_BISPO, posi_atual_p, movimento_p, turno)
-                valido = True
+            elif tabuleiro[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] == BISPO_V and turno == VERDES or \
+                    tabuleiro[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] == BISPO_A and turno == AZUIS:
 
-            else:
-                peça_erro = P_BISPO
+                if verificar_bispo(posi_atual_p, movimento_p, turno):
+                    mover_peça(P_BISPO, posi_atual_p, movimento_p, turno)
+                    valido = True
 
-        elif tabuleiro[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] == RAINHA_V and turno == VERDES or \
-                tabuleiro[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] == RAINHA_A and turno == AZUIS:
+                else:
+                    peça_erro = P_BISPO
 
-            if verificar_bispo(posi_atual_p, movimento_p, turno) or verificar_torre(posi_atual_p, movimento_p, turno):
-                mover_peça(P_RAINHA, posi_atual_p, movimento_p, turno)
-                valido = True
+            elif tabuleiro[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] == RAINHA_V and turno == VERDES or \
+                    tabuleiro[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] == RAINHA_A and turno == AZUIS:
 
-            else:
-                peça_erro = P_RAINHA
+                if verificar_bispo(posi_atual_p, movimento_p, turno) or verificar_torre(posi_atual_p, movimento_p, turno):
+                    mover_peça(P_RAINHA, posi_atual_p, movimento_p, turno)
+                    valido = True
 
-    else:
-        print("Você não pode mover a peça nessa posição, pois seu rei está em XEQUE.")
+                else:
+                    peça_erro = P_RAINHA
+
+        else:
+            print("Você não pode mover a peça nessa posição, pois seu rei está em XEQUE.")
 
     if tabuleiro[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] == REI_V and turno == VERDES or \
             tabuleiro[int(posi_atual_p[0]) - 1][COLUNA_REFERENCIA.index(posi_atual_p[1])] == REI_A and turno == AZUIS:
 
-        if (turno == VERDES and tabuleiro_captura_azuis[int(movimento_p[0])-1][COLUNA_REFERENCIA.index(movimento_p[1])] == 0 or \
-                turno == VERDES and tabuleiro_captura_azuis[int(movimento_p[0]) - 1][COLUNA_REFERENCIA.index(movimento_p[1])] == MOVIMENTO_PEAO):
+        if (turno == VERDES and tabuleiro_captura_azuis[int(movimento_p[0])-1][COLUNA_REFERENCIA.index(movimento_p[1])] == 0) or \
+                (turno == VERDES and tabuleiro_captura_azuis[int(movimento_p[0]) - 1][COLUNA_REFERENCIA.index(movimento_p[1])] == MOVIMENTO_PEAO) or \
+                (turno == VERDES and tabuleiro_captura_azuis[int(movimento_p[0]) - 1][COLUNA_REFERENCIA.index(movimento_p[1])] == PEÇA_XEQUE):
             if verificar_rei(posi_atual_p, movimento_p, turno):
                 mover_peça(P_REI, posi_atual_p, movimento_p, turno)
                 valido = True
             else:
                 peça_erro = P_REI
 
-        elif (turno == AZUIS and tabuleiro_captura_verdes[int(movimento_p[0]) - 1][COLUNA_REFERENCIA.index(movimento_p[1])] == 0 or \
-            turno == AZUIS and tabuleiro_captura_verdes[int(movimento_p[0]) - 1][COLUNA_REFERENCIA.index(movimento_p[1])] == MOVIMENTO_PEAO):
+        elif (turno == AZUIS and tabuleiro_captura_verdes[int(movimento_p[0]) - 1][COLUNA_REFERENCIA.index(movimento_p[1])] == 0) or \
+              (turno == AZUIS and tabuleiro_captura_verdes[int(movimento_p[0]) - 1][COLUNA_REFERENCIA.index(movimento_p[1])] == MOVIMENTO_PEAO) or \
+                (turno == AZUIS and tabuleiro_captura_verdes[int(movimento_p[0]) - 1][COLUNA_REFERENCIA.index(movimento_p[1])] == PEÇA_XEQUE):
             if verificar_rei(posi_atual_p, movimento_p, turno):
                 mover_peça(P_REI, posi_atual_p, movimento_p, turno)
                 valido = True
@@ -558,11 +630,11 @@ def verificar_xeque_mate():
     if turno == VERDES:
         for i in range(TAMANHO_TABULEIRO):
             for j in range(TAMANHO_TABULEIRO):
-                if tabuleiro_captura_verdes[i][j] == CAPTURA and tabuleiro_captura_azuis[i][j] == AREA_XEQUE:
+                if tabuleiro_captura_verdes[i][j] == CAPTURA and (tabuleiro_captura_azuis[i][j] == AREA_XEQUE or tabuleiro_captura_azuis[i][j] == PEÇA_XEQUE):
                     return False
-                elif tabuleiro_captura_verdes[i][j] == MOVIMENTO_PEAO and tabuleiro_captura_azuis[i][j] == AREA_XEQUE:
+                elif tabuleiro_captura_verdes[i][j] == MOVIMENTO_PEAO and (tabuleiro_captura_azuis[i][j] == AREA_XEQUE or tabuleiro_captura_azuis[i][j] == PEÇA_XEQUE):
                     return False
-                elif tabuleiro_captura_verdes[i][j] == MOV_CAPTURA_PEAO and tabuleiro_captura_azuis[i][j] == AREA_XEQUE:
+                elif tabuleiro_captura_verdes[i][j] == MOV_CAPTURA_PEAO and tabuleiro_captura_azuis[i][j] == AREA_XEQUE or tabuleiro_captura_azuis[i][j] == PEÇA_XEQUE:
                     return False
 
         for i in range(-1, 2):
@@ -570,7 +642,8 @@ def verificar_xeque_mate():
                 if not (i == 0 and i == j):
                     if ((posis_reis[0][0]) + i >= 0 and (posis_reis[0][0]) + i < TAMANHO_TABULEIRO) and \
                             ((posis_reis[0][1]) + j >= 0 and (posis_reis[0][1]) + j < TAMANHO_TABULEIRO):
-                        if tabuleiro_captura_azuis[(posis_reis[0][0])+i][(posis_reis[0][1])+j] == 0:
+                        if tabuleiro_captura_azuis[(posis_reis[0][0])+i][(posis_reis[0][1])+j] == 0 or \
+                                tabuleiro_captura_azuis[(posis_reis[0][0])+i][(posis_reis[0][1])+j] == PEÇA_XEQUE:
                             if tabuleiro_cores[(posis_reis[0][0])+i][(posis_reis[0][1])+j] != VERDES:
                                 cont += 1
 
@@ -582,11 +655,11 @@ def verificar_xeque_mate():
     else:
         for i in range(TAMANHO_TABULEIRO):
             for j in range(TAMANHO_TABULEIRO):
-                if tabuleiro_captura_azuis[i][j] == CAPTURA and tabuleiro_captura_verdes[i][j] == AREA_XEQUE:
+                if tabuleiro_captura_azuis[i][j] == CAPTURA and (tabuleiro_captura_verdes[i][j] == AREA_XEQUE or tabuleiro_captura_verdes[i][j] == PEÇA_XEQUE):
                     return False
-                elif tabuleiro_captura_azuis[i][j] == MOVIMENTO_PEAO and tabuleiro_captura_verdes[i][j] == AREA_XEQUE:
+                elif tabuleiro_captura_azuis[i][j] == MOVIMENTO_PEAO and (tabuleiro_captura_verdes[i][j] == AREA_XEQUE or tabuleiro_captura_verdes[i][j] == PEÇA_XEQUE):
                     return False
-                elif tabuleiro_captura_azuis[i][j] == MOV_CAPTURA_PEAO and tabuleiro_captura_verdes[i][j] == AREA_XEQUE:
+                elif tabuleiro_captura_azuis[i][j] == MOV_CAPTURA_PEAO and (tabuleiro_captura_verdes[i][j] == AREA_XEQUE or tabuleiro_captura_verdes[i][j] == PEÇA_XEQUE):
                     return False
 
         for i in range(-1, 2):
@@ -594,7 +667,8 @@ def verificar_xeque_mate():
                 if not (i == 0 and i == j):
                     if ((posis_reis[1][0]) + i >= 0 and (posis_reis[1][0]) + i < TAMANHO_TABULEIRO) and \
                             ((posis_reis[1][1]) + j >= 0 and (posis_reis[1][1]) + j < TAMANHO_TABULEIRO):
-                        if tabuleiro_captura_verdes[(posis_reis[1][0]) + i][(posis_reis[1][1]) + j] == 0:
+                        if tabuleiro_captura_verdes[(posis_reis[1][0]) + i][(posis_reis[1][1]) + j] == 0 or \
+                                tabuleiro_captura_verdes[(posis_reis[1][0]) + i][(posis_reis[1][1]) + j] == PEÇA_XEQUE:
                             if tabuleiro_cores[(posis_reis[1][0]) + i][(posis_reis[1][1]) + j] != AZUIS:
                                 cont += 1
 
