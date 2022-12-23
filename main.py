@@ -1,11 +1,43 @@
-from logica import *
+from peças import *
+from time import sleep
 
+
+def imprimir_tutorial():
+    print(MSG_TUTORIAL1)
+    sleep(2.5)
+    print(MSG_TUTORIAL2)
+    sleep(2.5)
+    print(MSG_TUTORIAL3)
+    sleep(2.5)
+    print(MSG_TUTORIAL4)
+    sleep(2.5)
+    input(MSG_TUTORIAL5)
+
+
+def imprime_tabuleiro():
+    for i in range(TAMANHO_TABULEIRO):
+        if i == 0:
+            for h in range(TAMANHO_TABULEIRO+1):
+                print(ESPACO, end=COLUNA_TABULEIRO[h])
+            print()
+        print(' ', SEPARADOR_HORIZ)
+        for j in range(TAMANHO_TABULEIRO):
+
+            if j == TAMANHO_TABULEIRO-1:
+                print(SEPARADOR_VERTICAL+tabuleiro[i][j], end=SEPARADOR_VERTICAL0)
+            else:
+                if j == 0:
+                    print(i+1, SEPARADOR_VERTICAL1, end=tabuleiro[i][j])
+                else:
+                    print(SEPARADOR_VERTICAL, end=tabuleiro[i][j])
+        print()
+        if i == TAMANHO_TABULEIRO-1:
+            print(' ', SEPARADOR_HORIZ)
 
 def validar_jogada():
     """
     Verifica se a entrada do usuario é correta.
     :return: Verdadeiro, caso a entrada esteja correta.
-
     """
 
     global posi_atual_p
@@ -766,7 +798,6 @@ def jogar():
 def verificar_xeque():
     """
     Verifica se algum dos reis está em XEQUE.
-
     :return: Retorna "True" caso algum rei esteja em XEQUE.
     """
     global xeque
@@ -782,7 +813,6 @@ def verificar_xeque():
 def verificar_xeque_mate():
     """
     Verifica, em caso de XEQUE, se foi XEQUE-MATE ou não.
-
     :return: Retorna "True" caso for XEQUE-MATE.
     """
 
@@ -841,7 +871,6 @@ def verificar_xeque_mate():
 def verificar_jogada():
     """
     Verifica se a peça pode se mover sem deixar seu rei desprotegido, ou seja em XEQUE.
-
     :return: Retorna "True" caso a peça possa se mover.
     """
 
@@ -890,7 +919,7 @@ xeque = False
 
 montando_tabuleiro()
 criar_referencia_cor()
-imprimir_tutorial()
+#imprimir_tutorial()
 
 while True:
 
