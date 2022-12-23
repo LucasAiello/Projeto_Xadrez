@@ -6,7 +6,7 @@ MSG_XEQUE = " "*18 + "XEQUE!"
 MSG_VITORIA_VERDES = "As verdes ganharam"
 MSG_VITORIA_AZUIS = "As azuis ganharam"
 MSG_XEQUE_MATE = "XEQUE-MATE"
-MSG_TUTORIAL5 = "Presione ENTER para começar."
+MSG_TUTORIAL5 = "Presione ENTER para começar.\n\n\n"
 MSG_TUTORIAL4 = "EX: 7e 6e, 7E5E, 7E 5E ou 7e5e\n"
 MSG_TUTORIAL3 = "Em seguida coloque o númera da linha com a letra da coluna do movimento desejado.\n"
 MSG_TUTORIAL2 = "Informe o número da linha com a letra da coluna da peça a ser movida;\n"
@@ -45,6 +45,7 @@ P_PEAO = "O peão"
 ERRO_REI_FICARA_XEQUE = "Você não pode fazer esse movimento pois o Rei ficará em XEQUE."
 NENHUM = "nenhum"
 ERRO_REI_EM_XEQUE = "Você não pode mover a peça nessa posição, pois seu rei está em XEQUE."
+REI_AINDA_XEQUE = "O rei não pode ir para essa posição, pois entrará em XEQUE."
 
 COLUNA_TABULEIRO = [' ', 'a ', ' b', '  c', '  d', '  e', '  f ', ' g', '  h']
 COLUNA_REFERENCIA = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']

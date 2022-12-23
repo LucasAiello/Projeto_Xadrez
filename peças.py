@@ -2,6 +2,15 @@ from constantes import *
 
 
 def verificar_peao(inicial, movimento, turno):
+    """
+    Verifica se a peça "peão" pode se movimentar para posição indicada.
+
+    :param inicial: Posição inicial da peça.
+    :param movimento: Posição de movimento.
+    :param turno:
+    :return: Retorna verdadeiro se a posição for valida.
+    """
+
     v = False
 
     if turno == VERDES:
@@ -38,6 +47,15 @@ def verificar_peao(inicial, movimento, turno):
 
 
 def verificar_cavalo(inicial, movimento, turno):
+    """
+        Verifica se a peça "cavalo" pode se movimentar para posição indicada.
+
+        :param inicial: Posição inicial da peça.
+        :param movimento: Posição de movimento.
+        :param turno:
+        :return: Retorna verdadeiro se a posição for valida.
+        """
+
     v = False
     if tabuleiro_cores[int(movimento[0]) - 1][COLUNA_REFERENCIA.index(movimento[1])] != turno:
         for i in range(-2, 3, 4):
@@ -53,6 +71,15 @@ def verificar_cavalo(inicial, movimento, turno):
 
 
 def verificar_torre(inicial, movimento, turno):
+    """
+        Verifica se a peça "torre" pode se movimentar para posição indicada.
+
+        :param inicial: Posição inicial da peça.
+        :param movimento: Posição de movimento.
+        :param turno:
+        :return: Retorna verdadeiro se a posição for valida.
+        """
+
     v = False
     cont = 0
 
@@ -89,6 +116,15 @@ def verificar_torre(inicial, movimento, turno):
 
 
 def verificar_rei(inicial, movimento, turno):
+    """
+        Verifica se a peça "rei" pode se movimentar para posição indicada.
+
+        :param inicial: Posição inicial da peça.
+        :param movimento: Posição de movimento.
+        :param turno:
+        :return: Retorna verdadeiro se a posição for valida.
+        """
+
     v = False
 
     if tabuleiro_cores[int(movimento[0]) - 1][COLUNA_REFERENCIA.index(movimento[1])] != turno:
@@ -109,6 +145,15 @@ def verificar_rei(inicial, movimento, turno):
 
 
 def verificar_bispo(inicial, movimento, turno):
+    """
+        Verifica se a peça "bispo" pode se movimentar para posição indicada.
+
+        :param inicial: Posição inicial da peça.
+        :param movimento: Posição de movimento.
+        :param turno:
+        :return: Retorna verdadeiro se a posição for valida.
+        """
+
     cont = 0
     val = False
 
@@ -166,6 +211,15 @@ def verificar_bispo(inicial, movimento, turno):
 
 
 def mover_peça(peça, inicial, movimento, turno):
+    """
+    Movimenta a peça no tabuleiro.
+
+    :param peça: A peça a ser movimentada.
+    :param inicial: Posição inicial.
+    :param movimento: Posição de movimento.
+    :param turno:
+    """
+
     global tabuleiro
     global tabuleiro_cores
 
