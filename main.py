@@ -2,7 +2,578 @@ from peças import *
 from time import sleep
 
 
+def verificar_captura_rei(i, j, cor):
+    """
+    Verifica as areas de captura da peça "rei".
+    :param i: Linha da peça.
+    :param j: Coluna da peça.
+    :param cor: Cor da peça.
+    """
+    for l in range(-1, 2):
+        for c in range(-1, 2):
+            if not (l == 0 and l == c):
+                if (i + l >= 0 and i + l < TAMANHO_TABULEIRO) and (j + c >= 0 and j + c < TAMANHO_TABULEIRO):
+                    if tabuleiro_cores[i + l][j + c] == ESPACO or tabuleiro_cores[i + l][j + c] == cor:
+                        if cor == VERDES:
+                            if tabuleiro_captura_verdes[i + l][j + c] == PEÇA_XEQUE:
+                                tabuleiro_captura_verdes[i + l][j + c] = AREA_XEQUE
+                            else:
+                                tabuleiro_captura_verdes[i + l][j + c] = 1
+                        else:
+                            if tabuleiro_captura_azuis[i + l][j + c] == PEÇA_XEQUE:
+                                tabuleiro_captura_azuis[i + l][j + c] = AREA_XEQUE
+                            else:
+                                tabuleiro_captura_azuis[i + l][j + c] = 1
+
+
+def verificar_captura_horizontal_vertical(i, j, cor):
+    """
+        Verifica as areas de captura nas horizontais e verticais.
+        :param i: Linha da peça.
+        :param j: Coluna da peça.
+        :param cor: Cor da peça.
+        """
+
+    for l in range(1, TAMANHO_TABULEIRO):
+        if i + l < TAMANHO_TABULEIRO:
+            if (cor == VERDES and tabuleiro_captura_verdes[i + l][j] != AREA_XEQUE) or (
+                    cor == AZUIS and tabuleiro_captura_azuis[i + l][j] != AREA_XEQUE):
+                if tabuleiro_cores[i + l][j] == ESPACO:
+                    if cor == VERDES:
+                        tabuleiro_captura_verdes[i + l][j] = CAPTURA
+                    else:
+                        tabuleiro_captura_azuis[i + l][j] = CAPTURA
+                elif tabuleiro_cores[i + l][j] == cor:
+                    if cor == VERDES:
+                        if tabuleiro[i + l][j] != REI_V:
+                            if tabuleiro_captura_verdes[i + l][j] == PEÇA_XEQUE:
+                                tabuleiro_captura_verdes[i + l][j] = AREA_XEQUE
+                            else:
+                                tabuleiro_captura_verdes[i + l][j] = CAPTURA
+                            break
+                    else:
+                        if tabuleiro[i + l][j] != REI_A:
+                            if tabuleiro_captura_azuis[i + l][j] == PEÇA_XEQUE:
+                                tabuleiro_captura_azuis[i + l][j] = AREA_XEQUE
+                            else:
+                                tabuleiro_captura_azuis[i + l][j] = CAPTURA
+                            break
+                elif (cor == VERDES and tabuleiro[i + l][j] == REI_A) or (
+                        cor == AZUIS and tabuleiro[i + l][j] == REI_V):
+                    for k in range(1, l + 1):
+                        if cor == VERDES:
+                            tabuleiro_captura_verdes[i + k][j] = AREA_XEQUE
+                            if tabuleiro_captura_verdes[i][j] == CAPTURA:
+                                tabuleiro_captura_verdes[i][j] = AREA_XEQUE
+                            else:
+                                tabuleiro_captura_verdes[i][j] = PEÇA_XEQUE
+                        else:
+                            tabuleiro_captura_azuis[i + k][j] = AREA_XEQUE
+                            if tabuleiro_captura_azuis[i][j] == CAPTURA:
+                                tabuleiro_captura_azuis[i][j] = AREA_XEQUE
+                            else:
+                                tabuleiro_captura_azuis[i][j] = PEÇA_XEQUE
+                    break
+                else:
+                    if cor == VERDES:
+                        tabuleiro_captura_verdes[i + l][j] = CAPTURA
+                        break
+                    else:
+                        tabuleiro_captura_azuis[i + l][j] = CAPTURA
+                        break
+
+    for l in range(1, TAMANHO_TABULEIRO):
+        if i - l >= 0:
+            if (cor == VERDES and tabuleiro_captura_verdes[i - l][j] != AREA_XEQUE) or (
+                    cor == AZUIS and tabuleiro_captura_azuis[i - l][j] != AREA_XEQUE):
+                if tabuleiro_cores[i - l][j] == ESPACO:
+                    if cor == VERDES:
+                        tabuleiro_captura_verdes[i - l][j] = CAPTURA
+                    else:
+                        tabuleiro_captura_azuis[i - l][j] = CAPTURA
+                elif tabuleiro_cores[i - l][j] == cor:
+                    if cor == VERDES:
+                        if tabuleiro[i - l][j] != REI_V:
+                            if tabuleiro_captura_verdes[i - l][j] == PEÇA_XEQUE:
+                                tabuleiro_captura_verdes[i - l][j] = AREA_XEQUE
+                            else:
+                                tabuleiro_captura_verdes[i - l][j] = CAPTURA
+                            break
+                    else:
+                        if tabuleiro[i - l][j] != REI_A:
+                            if tabuleiro_captura_azuis[i - l][j] == PEÇA_XEQUE:
+                                tabuleiro_captura_azuis[i - l][j] = AREA_XEQUE
+                            else:
+                                tabuleiro_captura_azuis[i - l][j] = CAPTURA
+                            break
+                elif (cor == VERDES and tabuleiro[i - l][j] == REI_A) or (
+                        cor == AZUIS and tabuleiro[i - l][j] == REI_V):
+                    for k in range(1, l + 1):
+                        if cor == VERDES:
+                            tabuleiro_captura_verdes[i - k][j] = AREA_XEQUE
+                            tabuleiro_captura_verdes[i][j] = PEÇA_XEQUE
+                        else:
+                            tabuleiro_captura_azuis[i - k][j] = AREA_XEQUE
+                            tabuleiro_captura_azuis[i][j] = PEÇA_XEQUE
+                    break
+                else:
+                    if cor == VERDES:
+                        tabuleiro_captura_verdes[i - l][j] = CAPTURA
+                        break
+                    else:
+                        tabuleiro_captura_azuis[i - l][j] = CAPTURA
+                        break
+
+    for l in range(1, TAMANHO_TABULEIRO):
+        if j + l < TAMANHO_TABULEIRO:
+            if (cor == VERDES and tabuleiro_captura_verdes[i][j + l] != AREA_XEQUE) or (
+                    cor == AZUIS and tabuleiro_captura_azuis[i][j + l] != AREA_XEQUE):
+                if tabuleiro_cores[i][j + l] == ESPACO:
+                    if cor == VERDES:
+                        tabuleiro_captura_verdes[i][j + l] = CAPTURA
+                    else:
+                        tabuleiro_captura_azuis[i][j + l] = CAPTURA
+                elif tabuleiro_cores[i][j + l] == cor:
+                    if cor == VERDES:
+                        if tabuleiro[i][j + l] != REI_V:
+                            if tabuleiro_captura_verdes[i][j + l] == PEÇA_XEQUE:
+                                tabuleiro_captura_verdes[i][j + l] = AREA_XEQUE
+                            else:
+                                tabuleiro_captura_verdes[i][j + l] = CAPTURA
+                            break
+                    else:
+                        if tabuleiro[i][j + l] != REI_A:
+                            if tabuleiro_captura_azuis[i][j + l] == PEÇA_XEQUE:
+                                tabuleiro_captura_azuis[i][j + l] = AREA_XEQUE
+                            else:
+                                tabuleiro_captura_azuis[i][j + l] = CAPTURA
+                            break
+                elif (cor == VERDES and tabuleiro[i][j + l] == REI_A) or (
+                        cor == AZUIS and tabuleiro[i][j + l] == REI_V):
+                    for k in range(1, l + 1):
+                        if cor == VERDES:
+                            tabuleiro_captura_verdes[i][j + k] = AREA_XEQUE
+                            tabuleiro_captura_verdes[i][j] = PEÇA_XEQUE
+                        else:
+                            tabuleiro_captura_azuis[i][j + k] = AREA_XEQUE
+                            tabuleiro_captura_azuis[i][j] = PEÇA_XEQUE
+                    break
+                else:
+                    if cor == VERDES:
+                        tabuleiro_captura_verdes[i][j + l] = CAPTURA
+                        break
+                    else:
+                        tabuleiro_captura_azuis[i][j + l] = CAPTURA
+                        break
+
+    for l in range(1, TAMANHO_TABULEIRO):
+        if j - l >= 0:
+            if (cor == VERDES and tabuleiro_captura_verdes[i][j - l] != AREA_XEQUE) or (
+                    cor == AZUIS and tabuleiro_captura_azuis[i][j - l] != AREA_XEQUE):
+                if tabuleiro_cores[i][j - l] == ESPACO:
+                    if cor == VERDES:
+                        tabuleiro_captura_verdes[i][j - l] = CAPTURA
+                    else:
+                        tabuleiro_captura_azuis[i][j - l] = CAPTURA
+                elif tabuleiro_cores[i][j - l] == cor:
+                    if cor == VERDES:
+                        if tabuleiro[i][j - l] != REI_V:
+                            if tabuleiro_captura_verdes[i][j - l] == PEÇA_XEQUE:
+                                tabuleiro_captura_verdes[i][j - l] = AREA_XEQUE
+                            else:
+                                tabuleiro_captura_verdes[i][j - l] = CAPTURA
+                            break
+                    else:
+                        if tabuleiro[i][j - l] != REI_A:
+                            if tabuleiro_captura_azuis[i][j - l] == PEÇA_XEQUE:
+                                tabuleiro_captura_azuis[i][j - l] = AREA_XEQUE
+                            else:
+                                tabuleiro_captura_azuis[i][j - l] = CAPTURA
+                            break
+
+                elif (cor == VERDES and tabuleiro[i][j - l] == REI_A) or (
+                        cor == AZUIS and tabuleiro[i][j - l] == REI_V):
+                    for k in range(1, l + 1):
+                        if cor == VERDES:
+                            tabuleiro_captura_verdes[i][j - k] = AREA_XEQUE
+                            tabuleiro_captura_verdes[i][j] = PEÇA_XEQUE
+                        else:
+                            tabuleiro_captura_azuis[i][j - k] = AREA_XEQUE
+                            tabuleiro_captura_azuis[i][j] = PEÇA_XEQUE
+                    break
+                else:
+                    if cor == VERDES:
+                        tabuleiro_captura_verdes[i][j - l] = CAPTURA
+                        break
+                    else:
+                        tabuleiro_captura_azuis[i][j - l] = CAPTURA
+                        break
+
+
+def verificar_captura_diagonal(i, j, cor):
+    """
+        Verifica as areas de captura nas diagonais.
+        :param i: Linha da peça.
+        :param j: Coluna da peça.
+        :param cor: Cor da peça.
+        """
+
+    for l in range(1, TAMANHO_TABULEIRO):
+        if i + l < TAMANHO_TABULEIRO and j + l < TAMANHO_TABULEIRO:
+            if (cor == VERDES and tabuleiro_captura_verdes[i + l][j + l] != AREA_XEQUE) or (
+                    cor == AZUIS and tabuleiro_captura_azuis[i + l][j + l] != AREA_XEQUE):
+                if tabuleiro_cores[i + l][j + l] == ESPACO:
+                    if cor == VERDES:
+                        tabuleiro_captura_verdes[i + l][j + l] = CAPTURA
+                    else:
+
+                        tabuleiro_captura_azuis[i + l][j + l] = CAPTURA
+                elif tabuleiro_cores[i + l][j + l] == cor:
+                    if cor == VERDES:
+                        if tabuleiro[i + l][j + l] != REI_V:
+                            if tabuleiro_captura_verdes[i + l][j + l] == PEÇA_XEQUE:
+                                tabuleiro_captura_verdes[i + l][j + l] = AREA_XEQUE
+                            else:
+                                tabuleiro_captura_verdes[i + l][j + l] = CAPTURA
+                        break
+                    else:
+                        if tabuleiro[i + l][j + l] != REI_A:
+                            if tabuleiro_captura_azuis[i + l][j + l] == PEÇA_XEQUE:
+                                tabuleiro_captura_azuis[i + l][j + l] = AREA_XEQUE
+                            else:
+                                tabuleiro_captura_azuis[i + l][j + l] = CAPTURA
+                        break
+
+                elif (cor == VERDES and tabuleiro[i + l][j + l] == REI_A) or (
+                        cor == AZUIS and tabuleiro[i + l][j + l] == REI_V):
+                    for k in range(1, l + 1):
+                        if cor == VERDES:
+                            tabuleiro_captura_verdes[i + k][j + k] = AREA_XEQUE
+                            if tabuleiro_captura_verdes[i][j] == CAPTURA:
+                                tabuleiro_captura_verdes[i][j] = AREA_XEQUE
+                            else:
+                                tabuleiro_captura_verdes[i][j] = PEÇA_XEQUE
+                        else:
+                            tabuleiro_captura_azuis[i + k][j + k] = AREA_XEQUE
+                            if tabuleiro_captura_azuis[i][j] == CAPTURA:
+                                tabuleiro_captura_azuis[i][j] = AREA_XEQUE
+                            else:
+                                tabuleiro_captura_azuis[i][j] = PEÇA_XEQUE
+                    break
+                else:
+                    break
+
+    for l in range(1, TAMANHO_TABULEIRO):
+        if i + l < TAMANHO_TABULEIRO and j - l >= 0:
+            if (cor == VERDES and tabuleiro_captura_verdes[i + l][j - l] != AREA_XEQUE) or (
+                    cor == AZUIS and tabuleiro_captura_azuis[i + l][j - l] != AREA_XEQUE):
+                if tabuleiro_cores[i + l][j - l] == ESPACO:
+                    if cor == VERDES:
+                        tabuleiro_captura_verdes[i + l][j - l] = CAPTURA
+                    else:
+                        tabuleiro_captura_azuis[i + l][j - l] = CAPTURA
+                elif tabuleiro_cores[i + l][j - l] == cor:
+                    if cor == VERDES:
+                        if tabuleiro[i + l][j - l] != REI_V:
+                            if tabuleiro_captura_verdes[i + l][j - l] == PEÇA_XEQUE:
+                                tabuleiro_captura_verdes[i + l][j - l] = AREA_XEQUE
+                            else:
+                                tabuleiro_captura_verdes[i + l][j - l] = CAPTURA
+                        break
+                    else:
+                        if tabuleiro[i + l][j - l] != REI_A:
+                            if tabuleiro_captura_azuis[i + l][j - l] == PEÇA_XEQUE:
+                                tabuleiro_captura_azuis[i + l][j - l] = AREA_XEQUE
+                            else:
+                                tabuleiro_captura_azuis[i + l][j - l] = CAPTURA
+                        break
+                elif (cor == VERDES and tabuleiro[i + l][j - l] == REI_A) or (
+                        cor == AZUIS and tabuleiro[i + l][j - l] == REI_V):
+                    for k in range(1, l + 1):
+                        if cor == VERDES:
+                            tabuleiro_captura_verdes[i + k][j - k] = AREA_XEQUE
+                            if tabuleiro_captura_verdes[i][j] == CAPTURA:
+                                tabuleiro_captura_verdes[i][j] = AREA_XEQUE
+                            else:
+                                tabuleiro_captura_verdes[i][j] = PEÇA_XEQUE
+                        else:
+                            tabuleiro_captura_azuis[i + k][j - k] = AREA_XEQUE
+                            if tabuleiro_captura_azuis[i][j] == CAPTURA:
+                                tabuleiro_captura_azuis[i][j] = AREA_XEQUE
+                            else:
+                                tabuleiro_captura_azuis[i][j] = PEÇA_XEQUE
+                    break
+                else:
+                    break
+
+    for l in range(1, TAMANHO_TABULEIRO):
+        if i - l >= 0 and j + l < TAMANHO_TABULEIRO:
+            if (cor == VERDES and tabuleiro_captura_verdes[i - l][j + l] != AREA_XEQUE) or (
+                    cor == AZUIS and tabuleiro_captura_azuis[i - l][j + l] != AREA_XEQUE):
+                if tabuleiro_cores[i - l][j + l] == ESPACO:
+                    if cor == VERDES:
+                        tabuleiro_captura_verdes[i - l][j + l] = CAPTURA
+                    else:
+                        tabuleiro_captura_azuis[i - l][j + l] = CAPTURA
+                elif tabuleiro_cores[i - l][j + l] == cor:
+                    if cor == VERDES:
+                        if tabuleiro[i - l][j + l] != REI_V:
+                            if tabuleiro_captura_verdes[i - l][j + l] == PEÇA_XEQUE:
+                                tabuleiro_captura_verdes[i - l][j + l] = AREA_XEQUE
+                            else:
+                                tabuleiro_captura_verdes[i - l][j + l] = CAPTURA
+                        break
+                    else:
+                        if tabuleiro[i - l][j + l] != REI_A:
+                            if tabuleiro_captura_azuis[i - l][j + l] == PEÇA_XEQUE:
+                                tabuleiro_captura_azuis[i - l][j + l] = AREA_XEQUE
+                            else:
+                                tabuleiro_captura_azuis[i - l][j + l] = CAPTURA
+                        break
+                elif (cor == VERDES and tabuleiro[i - l][j + l] == REI_A) or (
+                        cor == AZUIS and tabuleiro[i - l][j + l] == REI_V):
+                    for k in range(1, l + 1):
+                        if cor == VERDES:
+                            tabuleiro_captura_verdes[i - k][j + k] = AREA_XEQUE
+                            tabuleiro_captura_verdes[i][j] = PEÇA_XEQUE
+                        else:
+                            tabuleiro_captura_azuis[i - k][j + k] = AREA_XEQUE
+                            tabuleiro_captura_azuis[i][j] = PEÇA_XEQUE
+                    break
+                else:
+                    break
+
+    for l in range(1, TAMANHO_TABULEIRO):
+        if i - l >= 0 and j - l >= 0:
+            if (cor == VERDES and tabuleiro_captura_verdes[i - l][j - l] != AREA_XEQUE) or (
+                    cor == AZUIS and tabuleiro_captura_azuis[i - l][j - l] != AREA_XEQUE):
+                if tabuleiro_cores[i - l][j - l] == ESPACO:
+                    if cor == VERDES:
+                        tabuleiro_captura_verdes[i - l][j - l] = CAPTURA
+                    else:
+                        tabuleiro_captura_azuis[i - l][j - l] = CAPTURA
+                elif tabuleiro_cores[i - l][j - l] == cor:
+                    if cor == VERDES:
+                        if tabuleiro[i - l][j - l] != REI_V:
+                            if tabuleiro_captura_verdes[i - l][j - l] == PEÇA_XEQUE:
+                                tabuleiro_captura_verdes[i - l][j - l] = AREA_XEQUE
+                            else:
+                                tabuleiro_captura_verdes[i - l][j - l] = CAPTURA
+                        break
+                    else:
+                        if tabuleiro[i - l][j - l] != REI_A:
+                            if tabuleiro_captura_azuis[i - l][j - l] == PEÇA_XEQUE:
+                                tabuleiro_captura_azuis[i - l][j - l] = AREA_XEQUE
+                            else:
+                                tabuleiro_captura_azuis[i - l][j - l] = CAPTURA
+                        break
+                elif (cor == VERDES and tabuleiro[i - l][j - l] == REI_A) or (
+                        cor == AZUIS and tabuleiro[i - l][j - l] == REI_V):
+                    for k in range(1, l + 1):
+                        if cor == VERDES:
+                            tabuleiro_captura_verdes[i - k][j - k] = AREA_XEQUE
+                            tabuleiro_captura_verdes[i][j] = PEÇA_XEQUE
+                        else:
+                            tabuleiro_captura_azuis[i - k][j - k] = AREA_XEQUE
+                            tabuleiro_captura_azuis[i][j] = PEÇA_XEQUE
+                    break
+
+                else:
+                    break
+
+
+def verificar_captura_peao(i, j, cor):
+    """
+        Verifica as areas de captura da peça "peo".
+        :param i: Linha da peça.
+        :param j: Coluna da peça.
+        :param cor: Cor da peça.
+        """
+
+    if tabuleiro[i][j] == PEAO_V:
+        if i - 1 >= 0 and j + 1 < TAMANHO_TABULEIRO:
+            if tabuleiro_captura_verdes[i - 1][j + 1] != AREA_XEQUE:
+                if tabuleiro_cores[i - 1][j + 1] == cor or tabuleiro_cores[i - 1][j + 1] == ESPACO:
+                    if tabuleiro_captura_verdes[i - 1][j + 1] == MOVIMENTO_PEAO:
+                        tabuleiro_captura_verdes[i - 1][j + 1] = MOV_CAPTURA_PEAO
+
+                    elif tabuleiro_captura_verdes[i - 1][j + 1] == 0:
+                        tabuleiro_captura_verdes[i - 1][j + 1] = CAPTURA_PEAO
+
+                    elif tabuleiro_captura_verdes[i - 1][j + 1] == PEÇA_XEQUE:
+                        tabuleiro_captura_verdes[i - 1][j + 1] = AREA_XEQUE
+
+                elif tabuleiro_cores[i - 1][j + 1] == AZUIS:
+                    if tabuleiro[i - 1][j + 1] == REI_A:
+                        tabuleiro_captura_verdes[i][j] = PEÇA_XEQUE
+                    else:
+                        tabuleiro_captura_verdes[i - 1][j + 1] = CAPTURA
+
+        if i == 6:
+            if tabuleiro_cores[i - 1][j] == ESPACO:
+                if tabuleiro_captura_verdes[i - 1][j] != AREA_XEQUE:
+                    if tabuleiro_cores[i - 1][j] == CAPTURA_PEAO:
+                        tabuleiro_captura_verdes[i - 1][j] = MOV_CAPTURA_PEAO
+
+                    elif tabuleiro_captura_verdes[i - 1][j] == 0:
+                        tabuleiro_captura_verdes[i - 1][j] = MOVIMENTO_PEAO
+
+            if tabuleiro_cores[i - 2][j] == ESPACO:
+                if tabuleiro_captura_verdes[i - 2][j] != AREA_XEQUE:
+                    if tabuleiro_cores[i - 2][j] == CAPTURA_PEAO:
+                        tabuleiro_captura_verdes[i - 2][j] = MOV_CAPTURA_PEAO
+
+                    elif tabuleiro_captura_verdes[i - 2][j] == 0:
+                        tabuleiro_captura_verdes[i - 2][j] = MOVIMENTO_PEAO
+        else:
+            if tabuleiro_captura_verdes[i - 1][j] != AREA_XEQUE:
+                if tabuleiro_cores[i - 1][j] == ESPACO:
+                    if tabuleiro_captura_verdes[i - 1][j] == CAPTURA_PEAO:
+                        tabuleiro_captura_verdes[i - 1][j] = MOV_CAPTURA_PEAO
+
+                    elif tabuleiro_captura_verdes[i - 1][j] == 0:
+                        tabuleiro_captura_verdes[i - 1][j] = MOVIMENTO_PEAO
+
+        if i - 1 >= 0 and j - 1 >= 0:
+            if tabuleiro_captura_verdes[i - 1][j - 1] != AREA_XEQUE:
+                if tabuleiro_cores[i - 1][j - 1] == cor or tabuleiro_cores[i - 1][j - 1] == ESPACO:
+                    if tabuleiro_captura_verdes[i - 1][j - 1] == MOVIMENTO_PEAO:
+                        tabuleiro_captura_verdes[i - 1][j - 1] = MOV_CAPTURA_PEAO
+
+                    elif tabuleiro_captura_verdes[i - 1][j - 1] == 0:
+                        tabuleiro_captura_verdes[i - 1][j - 1] = CAPTURA_PEAO
+
+                    elif tabuleiro_captura_verdes[i - 1][j - 1] == PEÇA_XEQUE:
+                        tabuleiro_captura_verdes[i - 1][j - 1] = AREA_XEQUE
+
+                elif tabuleiro_cores[i - 1][j - 1] == AZUIS:
+                    if tabuleiro[i - 1][j - 1] == REI_A:
+                        tabuleiro_captura_verdes[i][j] = PEÇA_XEQUE
+                    else:
+                        tabuleiro_captura_verdes[i - 1][j - 1] = CAPTURA
+
+    # Peões Azuis
+
+    else:
+        if i + 1 < TAMANHO_TABULEIRO and j + 1 < TAMANHO_TABULEIRO:
+            if tabuleiro_captura_azuis[i + 1][j + 1] != AREA_XEQUE:
+                if tabuleiro_cores[i + 1][j + 1] == cor or tabuleiro_cores[i + 1][j + 1] == ESPACO:
+                    if tabuleiro_captura_azuis[i + 1][j + 1] == MOVIMENTO_PEAO:
+                        tabuleiro_captura_azuis[i + 1][j + 1] = MOV_CAPTURA_PEAO
+
+                    elif tabuleiro_captura_azuis[i + 1][j + 1] == MOV_CAPTURA_PEAO:
+                        pass
+                    elif tabuleiro_captura_azuis[i + 1][j + 1] == PEÇA_XEQUE:
+                        tabuleiro_captura_azuis[i + 1][j + 1] = AREA_XEQUE
+
+                    else:
+                        tabuleiro_captura_azuis[i + 1][j + 1] = CAPTURA_PEAO
+
+                elif tabuleiro_cores[i + 1][j + 1] == VERDES:
+                    if tabuleiro[i + 1][j + 1] == REI_V:
+                        tabuleiro_captura_azuis[i][j] = PEÇA_XEQUE
+                    else:
+                        tabuleiro_captura_azuis[i + 1][j + 1] = CAPTURA
+
+        if i == 1:
+            if tabuleiro_cores[i + 1][j] == ESPACO:
+                if tabuleiro_captura_azuis[i + 1][j] != AREA_XEQUE:
+                    if tabuleiro_captura_azuis[i + 1][j] == CAPTURA_PEAO:
+                        tabuleiro_captura_azuis[i + 1][j] = MOV_CAPTURA_PEAO
+
+                    elif tabuleiro_captura_azuis[i + 1][j] == MOV_CAPTURA_PEAO:
+                        pass
+                    else:
+                        tabuleiro_captura_azuis[i + 1][j] = MOVIMENTO_PEAO
+
+            if tabuleiro_captura_azuis[i + 2][j] != AREA_XEQUE:
+                if tabuleiro_cores[i + 2][j] == ESPACO:
+                    if tabuleiro_captura_azuis[i + 2][j] == CAPTURA_PEAO:
+                        tabuleiro_captura_azuis[i + 2][j] = MOV_CAPTURA_PEAO
+
+                    elif tabuleiro_captura_azuis[i + 2][j] == MOV_CAPTURA_PEAO:
+                        pass
+                    else:
+                        tabuleiro_captura_azuis[i + 2][j] = MOVIMENTO_PEAO
+        else:
+            if tabuleiro_captura_azuis[i + 1][j] != AREA_XEQUE:
+                if tabuleiro_cores[i + 1][j] == ESPACO:
+                    if tabuleiro_captura_azuis[i + 1][j] == CAPTURA_PEAO:
+                        tabuleiro_captura_azuis[i + 1][j] = MOV_CAPTURA_PEAO
+
+                    elif tabuleiro_captura_azuis[i + 1][j] == MOV_CAPTURA_PEAO:
+                        pass
+                    else:
+                        tabuleiro_captura_azuis[i + 1][j] = MOVIMENTO_PEAO
+
+        if i + 1 < TAMANHO_TABULEIRO and j - 1 >= 0:
+            if tabuleiro_captura_azuis[i + 1][j - 1] != AREA_XEQUE:
+                if tabuleiro_cores[i + 1][j - 1] == cor or tabuleiro_cores[i + 1][j - 1] == ESPACO:
+                    if tabuleiro_captura_azuis[i + 1][j - 1] == MOVIMENTO_PEAO:
+                        tabuleiro_captura_azuis[i + 1][j - 1] = MOV_CAPTURA_PEAO
+
+                    elif tabuleiro_captura_azuis[i + 1][j - 1] == MOV_CAPTURA_PEAO:
+                        pass
+                    elif tabuleiro_captura_azuis[i + 1][j - 1] == PEÇA_XEQUE:
+                        tabuleiro_captura_azuis[i + 1][j - 1] = AREA_XEQUE
+
+                    else:
+                        tabuleiro_captura_azuis[i + 1][j - 1] = CAPTURA_PEAO
+
+                elif tabuleiro_cores[i + 1][j - 1] == VERDES:
+                    if tabuleiro[i + 1][j - 1] == REI_V:
+                        tabuleiro_captura_azuis[i][j] = PEÇA_XEQUE
+                    else:
+                        tabuleiro_captura_azuis[i + 1][j - 1] = CAPTURA
+
+
+def verificar_captura_cavalo(i, j, cor):
+    """
+        Verifica as areas de captura da peça "cavalo".
+        :param i: Linha da peça.
+        :param j: Coluna da peça.
+        :param cor: Cor da peça.
+        """
+
+    for l in range(-2, 3, 1):
+        if l != 0:
+            for c in range(-2, 3, 1):
+                if c != 0 and l + c != 0 and l != c:
+                    if (j + c >= 0 and j + c < TAMANHO_TABULEIRO) and (i + l >= 0 and i + l < TAMANHO_TABULEIRO):
+                        if (cor == VERDES and tabuleiro_captura_verdes[i + l][j + c] != 2) or (
+                                cor == AZUIS and tabuleiro_captura_azuis[i + l][j + c] != 2):
+                            if tabuleiro_cores[i + l][j + c] == ESPACO:
+                                if cor == VERDES:
+                                    tabuleiro_captura_verdes[i + l][j + c] = CAPTURA
+                                else:
+                                    tabuleiro_captura_azuis[i + l][j + c] = CAPTURA
+
+                            elif tabuleiro_cores[i + l][j + c] == cor:
+                                if cor == VERDES and tabuleiro[i + l][j + c] != REI_V:
+                                    if tabuleiro_captura_verdes[i + l][j + c] == PEÇA_XEQUE:
+                                        tabuleiro_captura_verdes[i + l][j + c] = AREA_XEQUE
+                                    else:
+                                        tabuleiro_captura_verdes[i + l][j + c] = CAPTURA
+                                else:
+                                    if cor == AZUIS and tabuleiro[i + l][j + c] != REI_A:
+                                        if tabuleiro_captura_azuis[i + l][j + c] == PEÇA_XEQUE:
+                                            tabuleiro_captura_azuis[i + l][j + c] = AREA_XEQUE
+                                        else:
+                                            tabuleiro_captura_azuis[i + l][j + c] = CAPTURA
+                            elif (cor == VERDES and tabuleiro[i + l][j + c] == REI_A) or \
+                                    (cor == AZUIS and tabuleiro[i + l][j + c] == REI_V):
+                                if cor == VERDES:
+                                    tabuleiro_captura_verdes[i][j] = AREA_XEQUE
+                                    tabuleiro_captura_verdes[i + l][j + c] = AREA_XEQUE
+                                else:
+                                    tabuleiro_captura_azuis[i][j] = AREA_XEQUE
+                                    tabuleiro_captura_azuis[i + l][j + c] = AREA_XEQUE
+
+
 def imprimir_tutorial():
+    """
+    Imprime as instruções iniciais para o usuario.
+    """
     print(MSG_TUTORIAL1)
     sleep(2.5)
     print(MSG_TUTORIAL2)
@@ -15,6 +586,9 @@ def imprimir_tutorial():
 
 
 def imprime_tabuleiro():
+    """
+    Imprime o tabuleiro, mostrando ao usuario os icones das peças.
+    """
     for i in range(TAMANHO_TABULEIRO):
         if i == 0:
             for h in range(TAMANHO_TABULEIRO+1):
@@ -33,6 +607,7 @@ def imprime_tabuleiro():
         print()
         if i == TAMANHO_TABULEIRO-1:
             print(' ', SEPARADOR_HORIZ)
+
 
 def validar_jogada():
     """
@@ -75,6 +650,10 @@ def criar_posis(coordenada):
 
 
 def trocar_turno():
+    """
+    Troca o turno para o proximo jogador.
+    :return:
+    """
     global turno
 
     if turno == VERDES:
@@ -138,340 +717,6 @@ def atualizar_referencia_captura(cor):
     global tabuleiro_captura_verdes
     global tabuleiro_captura_azuis
 
-    def verificar_horizontal_vertical():
-        for l in range(1, TAMANHO_TABULEIRO):
-            if i + l < TAMANHO_TABULEIRO:
-                if (cor == VERDES and tabuleiro_captura_verdes[i + l][j] != AREA_XEQUE) or (cor == AZUIS and tabuleiro_captura_azuis[i + l][j] != AREA_XEQUE):
-                    if tabuleiro_cores[i + l][j] == ESPACO:
-                        if cor == VERDES:
-                            tabuleiro_captura_verdes[i + l][j] = CAPTURA
-                        else:
-                            tabuleiro_captura_azuis[i + l][j] = CAPTURA
-                    elif tabuleiro_cores[i + l][j] == cor:
-                        if cor == VERDES:
-                            if tabuleiro[i + l][j] != REI_V:
-                                if tabuleiro_captura_verdes[i + l][j] == PEÇA_XEQUE:
-                                    tabuleiro_captura_verdes[i + l][j] = AREA_XEQUE
-                                else:
-                                    tabuleiro_captura_verdes[i + l][j] = CAPTURA
-                                break
-                        else:
-                            if tabuleiro[i + l][j] != REI_A:
-                                if tabuleiro_captura_azuis[i + l][j] == PEÇA_XEQUE:
-                                    tabuleiro_captura_azuis[i + l][j] = AREA_XEQUE
-                                else:
-                                    tabuleiro_captura_azuis[i + l][j] = CAPTURA
-                                break
-                    elif (cor == VERDES and tabuleiro[i + l][j] == REI_A) or (
-                            cor == AZUIS and tabuleiro[i + l][j] == REI_V):
-                        for k in range(1, l+1):
-                            if cor == VERDES:
-                                tabuleiro_captura_verdes[i + k][j] = AREA_XEQUE
-                                if tabuleiro_captura_verdes[i][j] == CAPTURA:
-                                    tabuleiro_captura_verdes[i][j] = AREA_XEQUE
-                                else:
-                                    tabuleiro_captura_verdes[i][j] = PEÇA_XEQUE
-                            else:
-                                tabuleiro_captura_azuis[i + k][j] = AREA_XEQUE
-                                if tabuleiro_captura_azuis[i][j] == CAPTURA:
-                                    tabuleiro_captura_azuis[i][j] = AREA_XEQUE
-                                else:
-                                    tabuleiro_captura_azuis[i][j] = PEÇA_XEQUE
-                        break
-                    else:
-                        if cor == VERDES:
-                            tabuleiro_captura_verdes[i + l][j] = CAPTURA
-                            break
-                        else:
-                            tabuleiro_captura_azuis[i + l][j] = CAPTURA
-                            break
-
-        for l in range(1, TAMANHO_TABULEIRO):
-            if i - l >= 0:
-                if (cor == VERDES and tabuleiro_captura_verdes[i - l][j] != AREA_XEQUE) or (cor == AZUIS and tabuleiro_captura_azuis[i - l][j] != AREA_XEQUE):
-                    if tabuleiro_cores[i - l][j] == ESPACO:
-                        if cor == VERDES:
-                            tabuleiro_captura_verdes[i - l][j] = CAPTURA
-                        else:
-                            tabuleiro_captura_azuis[i - l][j] = CAPTURA
-                    elif tabuleiro_cores[i - l][j] == cor:
-                        if cor == VERDES:
-                            if tabuleiro[i - l][j] != REI_V:
-                                if tabuleiro_captura_verdes[i - l][j] == PEÇA_XEQUE:
-                                    tabuleiro_captura_verdes[i - l][j] = AREA_XEQUE
-                                else:
-                                    tabuleiro_captura_verdes[i - l][j] = CAPTURA
-                                break
-                        else:
-                            if tabuleiro[i - l][j] != REI_A:
-                                if tabuleiro_captura_azuis[i - l][j] == PEÇA_XEQUE:
-                                    tabuleiro_captura_azuis[i - l][j] = AREA_XEQUE
-                                else:
-                                    tabuleiro_captura_azuis[i - l][j] = CAPTURA
-                                break
-                    elif (cor == VERDES and tabuleiro[i - l][j] == REI_A) or (
-                            cor == AZUIS and tabuleiro[i - l][j] == REI_V):
-                        for k in range(1, l + 1):
-                            if cor == VERDES:
-                                tabuleiro_captura_verdes[i - k][j] = AREA_XEQUE
-                                tabuleiro_captura_verdes[i][j] = PEÇA_XEQUE
-                            else:
-                                tabuleiro_captura_azuis[i - k][j] = AREA_XEQUE
-                                tabuleiro_captura_azuis[i][j] = PEÇA_XEQUE
-                        break
-                    else:
-                        if cor == VERDES:
-                            tabuleiro_captura_verdes[i - l][j] = CAPTURA
-                            break
-                        else:
-                            tabuleiro_captura_azuis[i - l][j] = CAPTURA
-                            break
-
-        for l in range(1, TAMANHO_TABULEIRO):
-            if j + l < TAMANHO_TABULEIRO:
-                if (cor == VERDES and tabuleiro_captura_verdes[i][j + l] != AREA_XEQUE) or (cor == AZUIS and tabuleiro_captura_azuis[i][j + l] != AREA_XEQUE):
-                    if tabuleiro_cores[i][j + l] == ESPACO:
-                        if cor == VERDES:
-                            tabuleiro_captura_verdes[i][j + l] = CAPTURA
-                        else:
-                            tabuleiro_captura_azuis[i][j + l] = CAPTURA
-                    elif tabuleiro_cores[i][j + l] == cor:
-                        if cor == VERDES:
-                            if tabuleiro[i][j + l] != REI_V:
-                                if tabuleiro_captura_verdes[i][j + l] == PEÇA_XEQUE:
-                                    tabuleiro_captura_verdes[i][j + l] = AREA_XEQUE
-                                else:
-                                    tabuleiro_captura_verdes[i][j + l] = CAPTURA
-                                break
-                        else:
-                            if tabuleiro[i][j + l] != REI_A:
-                                if tabuleiro_captura_azuis[i][j + l] == PEÇA_XEQUE:
-                                    tabuleiro_captura_azuis[i][j + l] = AREA_XEQUE
-                                else:
-                                    tabuleiro_captura_azuis[i][j + l] = CAPTURA
-                                break
-                    elif (cor == VERDES and tabuleiro[i][j + l] == REI_A) or (
-                            cor == AZUIS and tabuleiro[i][j + l] == REI_V):
-                        for k in range(1, l + 1):
-                            if cor == VERDES:
-                                tabuleiro_captura_verdes[i][j + k] = AREA_XEQUE
-                                tabuleiro_captura_verdes[i][j] = PEÇA_XEQUE
-                            else:
-                                tabuleiro_captura_azuis[i][j + k] = AREA_XEQUE
-                                tabuleiro_captura_azuis[i][j] = PEÇA_XEQUE
-                        break
-                    else:
-                        if cor == VERDES:
-                            tabuleiro_captura_verdes[i][j + l] = CAPTURA
-                            break
-                        else:
-                            tabuleiro_captura_azuis[i][j + l] = CAPTURA
-                            break
-
-        for l in range(1, TAMANHO_TABULEIRO):
-            if j - l >= 0:
-                if (cor == VERDES and tabuleiro_captura_verdes[i][j - l] != AREA_XEQUE) or (cor == AZUIS and tabuleiro_captura_azuis[i][j - l] != AREA_XEQUE):
-                    if tabuleiro_cores[i][j - l] == ESPACO:
-                        if cor == VERDES:
-                            tabuleiro_captura_verdes[i][j - l] = CAPTURA
-                        else:
-                            tabuleiro_captura_azuis[i][j - l] = CAPTURA
-                    elif tabuleiro_cores[i][j - l] == cor:
-                        if cor == VERDES:
-                            if tabuleiro[i][j - l] != REI_V:
-                                if tabuleiro_captura_verdes[i][j - l] == PEÇA_XEQUE:
-                                    tabuleiro_captura_verdes[i][j - l] = AREA_XEQUE
-                                else:
-                                    tabuleiro_captura_verdes[i][j - l] = CAPTURA
-                                break
-                        else:
-                            if tabuleiro[i][j - l] != REI_A:
-                                if tabuleiro_captura_azuis[i][j - l] == PEÇA_XEQUE:
-                                    tabuleiro_captura_azuis[i][j - l] = AREA_XEQUE
-                                else:
-                                    tabuleiro_captura_azuis[i][j - l] = CAPTURA
-                                break
-
-                    elif (cor == VERDES and tabuleiro[i][j - l] == REI_A) or (
-                            cor == AZUIS and tabuleiro[i][j - l] == REI_V):
-                        for k in range(1, l + 1):
-                            if cor == VERDES:
-                                tabuleiro_captura_verdes[i][j - k] = AREA_XEQUE
-                                tabuleiro_captura_verdes[i][j] = PEÇA_XEQUE
-                            else:
-                                tabuleiro_captura_azuis[i][j - k] = AREA_XEQUE
-                                tabuleiro_captura_azuis[i][j] = PEÇA_XEQUE
-                        break
-                    else:
-                        if cor == VERDES:
-                            tabuleiro_captura_verdes[i][j - l] = CAPTURA
-                            break
-                        else:
-                            tabuleiro_captura_azuis[i][j - l] = CAPTURA
-                            break
-
-    def verificar_diagonal():
-        for l in range(1, TAMANHO_TABULEIRO):
-            if i + l < TAMANHO_TABULEIRO and j + l < TAMANHO_TABULEIRO:
-                if (cor == VERDES and tabuleiro_captura_verdes[i + l][j + l] != AREA_XEQUE) or (cor == AZUIS and tabuleiro_captura_azuis[i + l][j + l] != AREA_XEQUE):
-                    if tabuleiro_cores[i + l][j + l] == ESPACO:
-                        if cor == VERDES:
-                            tabuleiro_captura_verdes[i + l][j + l] = CAPTURA
-                        else:
-
-                            tabuleiro_captura_azuis[i + l][j + l] = CAPTURA
-                    elif tabuleiro_cores[i + l][j + l] == cor:
-                        if cor == VERDES:
-                            if tabuleiro[i + l][j + l] != REI_V:
-                                if tabuleiro_captura_verdes[i + l][j + l] == PEÇA_XEQUE:
-                                    tabuleiro_captura_verdes[i + l][j + l] = AREA_XEQUE
-                                else:
-                                    tabuleiro_captura_verdes[i + l][j + l] = CAPTURA
-                            break
-                        else:
-                            if tabuleiro[i + l][j + l] != REI_A:
-                                if tabuleiro_captura_azuis[i + l][j + l] == PEÇA_XEQUE:
-                                    tabuleiro_captura_azuis[i + l][j + l] = AREA_XEQUE
-                                else:
-                                    tabuleiro_captura_azuis[i + l][j + l] = CAPTURA
-                            break
-
-                    elif (cor == VERDES and tabuleiro[i + l][j + l] == REI_A) or (
-                            cor == AZUIS and tabuleiro[i + l][j + l] == REI_V):
-                        for k in range(1, l+1):
-                            if cor == VERDES:
-                                tabuleiro_captura_verdes[i+k][j + k] = AREA_XEQUE
-                                if tabuleiro_captura_verdes[i][j] == CAPTURA:
-                                    tabuleiro_captura_verdes[i][j] = AREA_XEQUE
-                                else:
-                                    tabuleiro_captura_verdes[i][j] = PEÇA_XEQUE
-                            else:
-                                tabuleiro_captura_azuis[i+k][j + k] = AREA_XEQUE
-                                if tabuleiro_captura_azuis[i][j] == CAPTURA:
-                                    tabuleiro_captura_azuis[i][j] = AREA_XEQUE
-                                else:
-                                    tabuleiro_captura_azuis[i][j] = PEÇA_XEQUE
-                        break
-                    else:
-                        break
-
-        for l in range(1, TAMANHO_TABULEIRO):
-            if i + l < TAMANHO_TABULEIRO and j - l >= 0:
-                if (cor == VERDES and tabuleiro_captura_verdes[i + l][j - l] != AREA_XEQUE) or (
-                        cor == AZUIS and tabuleiro_captura_azuis[i + l][j - l] != AREA_XEQUE):
-                    if tabuleiro_cores[i + l][j - l] == ESPACO:
-                        if cor == VERDES:
-                            tabuleiro_captura_verdes[i + l][j - l] = CAPTURA
-                        else:
-                            tabuleiro_captura_azuis[i + l][j - l] = CAPTURA
-                    elif tabuleiro_cores[i + l][j - l] == cor:
-                        if cor == VERDES:
-                            if tabuleiro[i + l][j - l] != REI_V:
-                                if tabuleiro_captura_verdes[i + l][j - l] == PEÇA_XEQUE:
-                                    tabuleiro_captura_verdes[i + l][j - l] = AREA_XEQUE
-                                else:
-                                    tabuleiro_captura_verdes[i + l][j - l] = CAPTURA
-                            break
-                        else:
-                            if tabuleiro[i + l][j - l] != REI_A:
-                                if tabuleiro_captura_azuis[i + l][j - l] == PEÇA_XEQUE:
-                                    tabuleiro_captura_azuis[i + l][j - l] = AREA_XEQUE
-                                else:
-                                    tabuleiro_captura_azuis[i + l][j - l] = CAPTURA
-                            break
-                    elif (cor == VERDES and tabuleiro[i + l][j - l] == REI_A) or (
-                            cor == AZUIS and tabuleiro[i + l][j - l] == REI_V):
-                        for k in range(1, l+1):
-                            if cor == VERDES:
-                                tabuleiro_captura_verdes[i+k][j - k] = AREA_XEQUE
-                                if tabuleiro_captura_verdes[i][j] == CAPTURA:
-                                    tabuleiro_captura_verdes[i][j] = AREA_XEQUE
-                                else:
-                                    tabuleiro_captura_verdes[i][j] = PEÇA_XEQUE
-                            else:
-                                tabuleiro_captura_azuis[i+k][j - k] = AREA_XEQUE
-                                if tabuleiro_captura_azuis[i][j] == CAPTURA:
-                                    tabuleiro_captura_azuis[i][j] = AREA_XEQUE
-                                else:
-                                    tabuleiro_captura_azuis[i][j] = PEÇA_XEQUE
-                        break
-                    else:
-                        break
-
-
-        for l in range(1, TAMANHO_TABULEIRO):
-            if i - l >= 0 and j + l < TAMANHO_TABULEIRO:
-                if (cor == VERDES and tabuleiro_captura_verdes[i - l][j + l] != AREA_XEQUE) or (cor == AZUIS and tabuleiro_captura_azuis[i - l][j + l] != AREA_XEQUE):
-                    if tabuleiro_cores[i - l][j + l] == ESPACO:
-                        if cor == VERDES:
-                            tabuleiro_captura_verdes[i - l][j + l] = CAPTURA
-                        else:
-                            tabuleiro_captura_azuis[i - l][j + l] = CAPTURA
-                    elif tabuleiro_cores[i - l][j + l] == cor:
-                        if cor == VERDES:
-                            if tabuleiro[i - l][j + l] != REI_V:
-                                if tabuleiro_captura_verdes[i - l][j + l] == PEÇA_XEQUE:
-                                    tabuleiro_captura_verdes[i - l][j + l] = AREA_XEQUE
-                                else:
-                                    tabuleiro_captura_verdes[i - l][j + l] = CAPTURA
-                            break
-                        else:
-                            if tabuleiro[i - l][j + l] != REI_A:
-                                if tabuleiro_captura_azuis[i - l][j + l] == PEÇA_XEQUE:
-                                    tabuleiro_captura_azuis[i - l][j + l] = AREA_XEQUE
-                                else:
-                                    tabuleiro_captura_azuis[i - l][j + l] = CAPTURA
-                            break
-                    elif (cor == VERDES and tabuleiro[i - l][j + l] == REI_A) or (
-                            cor == AZUIS and tabuleiro[i - l][j + l] == REI_V):
-                        for k in range(1, l+1):
-                            if cor == VERDES:
-                                tabuleiro_captura_verdes[i - k][j + k] = AREA_XEQUE
-                                tabuleiro_captura_verdes[i][j] = PEÇA_XEQUE
-                            else:
-                                tabuleiro_captura_azuis[i - k][j + k] = AREA_XEQUE
-                                tabuleiro_captura_azuis[i][j] = PEÇA_XEQUE
-                        break
-                    else:
-                        break
-
-        for l in range(1, TAMANHO_TABULEIRO):
-            if i - l >= 0 and j - l >= 0:
-                if (cor == VERDES and tabuleiro_captura_verdes[i - l][j - l] != AREA_XEQUE) or (cor == AZUIS and tabuleiro_captura_azuis[i - l][j - l] != AREA_XEQUE):
-                    if tabuleiro_cores[i - l][j - l] == ESPACO:
-                        if cor == VERDES:
-                            tabuleiro_captura_verdes[i - l][j - l] = CAPTURA
-                        else:
-                            tabuleiro_captura_azuis[i - l][j - l] = CAPTURA
-                    elif tabuleiro_cores[i - l][j - l] == cor:
-                        if cor == VERDES:
-                            if tabuleiro[i - l][j - l] != REI_V:
-                                if tabuleiro_captura_verdes[i - l][j - l] == PEÇA_XEQUE:
-                                    tabuleiro_captura_verdes[i - l][j - l] = AREA_XEQUE
-                                else:
-                                    tabuleiro_captura_verdes[i - l][j - l] = CAPTURA
-                            break
-                        else:
-                            if tabuleiro[i - l][j - l] != REI_A:
-                                if tabuleiro_captura_azuis[i - l][j - l] == PEÇA_XEQUE:
-                                    tabuleiro_captura_azuis[i - l][j - l] = AREA_XEQUE
-                                else:
-                                    tabuleiro_captura_azuis[i - l][j - l] = CAPTURA
-                            break
-                    elif (cor == VERDES and tabuleiro[i - l][j - l] == REI_A) or (
-                            cor == AZUIS and tabuleiro[i - l][j - l] == REI_V):
-                        for k in range(1, l+1):
-                            if cor == VERDES:
-                                tabuleiro_captura_verdes[i - k][j - k] = AREA_XEQUE
-                                tabuleiro_captura_verdes[i][j] = PEÇA_XEQUE
-                            else:
-                                tabuleiro_captura_azuis[i - k][j - k] = AREA_XEQUE
-                                tabuleiro_captura_azuis[i][j] = PEÇA_XEQUE
-                        break
-
-                    else:
-                        break
-
     if cor == VERDES:
         tabuleiro_captura_verdes = [[0 for x in range(TAMANHO_TABULEIRO)] for y in range(TAMANHO_TABULEIRO)]
     else:
@@ -481,203 +726,23 @@ def atualizar_referencia_captura(cor):
         for j in range(TAMANHO_TABULEIRO):
             if tabuleiro_cores[i][j] == cor:
                 if tabuleiro[i][j] == PEAO_V or tabuleiro[i][j] == PEAO_A:
-                    if tabuleiro[i][j] == PEAO_V:
-                        if i - 1 >= 0 and j + 1 < TAMANHO_TABULEIRO:
-                            if tabuleiro_captura_verdes[i - 1][j + 1] != AREA_XEQUE:
-                                if tabuleiro_cores[i-1][j+1] == cor or tabuleiro_cores[i-1][j+1] == ESPACO:
-                                    if tabuleiro_captura_verdes[i - 1][j + 1] == MOVIMENTO_PEAO:
-                                        tabuleiro_captura_verdes[i - 1][j + 1] = MOV_CAPTURA_PEAO
-
-                                    elif tabuleiro_captura_verdes[i - 1][j + 1] == 0:
-                                        tabuleiro_captura_verdes[i - 1][j + 1] = CAPTURA_PEAO
-
-                                    elif tabuleiro_captura_verdes[i - 1][j + 1] == PEÇA_XEQUE:
-                                        tabuleiro_captura_verdes[i - 1][j + 1] = AREA_XEQUE
-
-                                elif tabuleiro_cores[i-1][j+1] == AZUIS:
-                                    if tabuleiro[i - 1][j + 1] == REI_A:
-                                        tabuleiro_captura_verdes[i][j] = PEÇA_XEQUE
-                                    else:
-                                        tabuleiro_captura_verdes[i - 1][j + 1] = CAPTURA
-
-                        if i == 6:
-                            if tabuleiro_cores[i - 1][j] == ESPACO:
-                                if tabuleiro_captura_verdes[i - 1][j] != AREA_XEQUE:
-                                    if tabuleiro_cores[i - 1][j] == CAPTURA_PEAO:
-                                        tabuleiro_captura_verdes[i - 1][j] = MOV_CAPTURA_PEAO
-
-                                    elif tabuleiro_captura_verdes[i - 1][j] == 0:
-                                        tabuleiro_captura_verdes[i - 1][j] = MOVIMENTO_PEAO
-
-                            if tabuleiro_cores[i - 2][j] == ESPACO:
-                                if tabuleiro_captura_verdes[i - 2][j] != AREA_XEQUE:
-                                    if tabuleiro_cores[i - 2][j] == CAPTURA_PEAO:
-                                        tabuleiro_captura_verdes[i - 2][j] = MOV_CAPTURA_PEAO
-
-                                    elif tabuleiro_captura_verdes[i - 2][j] == 0:
-                                        tabuleiro_captura_verdes[i - 2][j] = MOVIMENTO_PEAO
-                        else:
-                            if tabuleiro_captura_verdes[i - 1][j] != AREA_XEQUE:
-                                if tabuleiro_cores[i - 1][j] == ESPACO:
-                                    if tabuleiro_captura_verdes[i - 1][j] == CAPTURA_PEAO:
-                                        tabuleiro_captura_verdes[i - 1][j] = MOV_CAPTURA_PEAO
-
-                                    elif tabuleiro_captura_verdes[i - 1][j] == 0:
-                                        tabuleiro_captura_verdes[i - 1][j] = MOVIMENTO_PEAO
-
-                        if i - 1 >= 0 and j - 1 >= 0:
-                            if tabuleiro_captura_verdes[i - 1][j - 1] != AREA_XEQUE:
-                                if tabuleiro_cores[i - 1][j - 1] == cor or tabuleiro_cores[i - 1][j - 1] == ESPACO:
-                                    if tabuleiro_captura_verdes[i - 1][j - 1] == MOVIMENTO_PEAO:
-                                        tabuleiro_captura_verdes[i - 1][j - 1] = MOV_CAPTURA_PEAO
-
-                                    elif tabuleiro_captura_verdes[i - 1][j - 1] == 0:
-                                        tabuleiro_captura_verdes[i - 1][j - 1] = CAPTURA_PEAO
-
-                                    elif tabuleiro_captura_verdes[i - 1][j - 1] == PEÇA_XEQUE:
-                                        tabuleiro_captura_verdes[i - 1][j - 1] = AREA_XEQUE
-
-                                elif tabuleiro_cores[i - 1][j - 1] == AZUIS:
-                                    if tabuleiro[i - 1][j - 1] == REI_A:
-                                        tabuleiro_captura_verdes[i][j] = PEÇA_XEQUE
-                                    else:
-                                        tabuleiro_captura_verdes[i - 1][j - 1] = CAPTURA
-
-                    # Peões Azuis
-
-                    else:
-                        if i + 1 < TAMANHO_TABULEIRO and j + 1 < TAMANHO_TABULEIRO:
-                            if tabuleiro_captura_azuis[i + 1][j + 1] != AREA_XEQUE:
-                                if tabuleiro_cores[i + 1][j + 1] == cor or tabuleiro_cores[i + 1][j + 1] == ESPACO:
-                                    if tabuleiro_captura_azuis[i + 1][j + 1] == MOVIMENTO_PEAO:
-                                        tabuleiro_captura_azuis[i + 1][j + 1] = MOV_CAPTURA_PEAO
-
-                                    elif tabuleiro_captura_azuis[i + 1][j + 1] == MOV_CAPTURA_PEAO:
-                                        pass
-                                    elif tabuleiro_captura_azuis[i + 1][j + 1] == PEÇA_XEQUE:
-                                        tabuleiro_captura_azuis[i + 1][j + 1] = AREA_XEQUE
-
-                                    else:
-                                        tabuleiro_captura_azuis[i + 1][j + 1] = CAPTURA_PEAO
-
-                                elif tabuleiro_cores[i + 1][j + 1] == VERDES:
-                                    if tabuleiro[i + 1][j + 1] == REI_V:
-                                        tabuleiro_captura_azuis[i][j] = PEÇA_XEQUE
-                                    else:
-                                        tabuleiro_captura_azuis[i + 1][j + 1] = CAPTURA
-
-                        if i == 1:
-                            if tabuleiro_cores[i + 1][j] == ESPACO:
-                                if tabuleiro_captura_azuis[i + 1][j] != AREA_XEQUE:
-                                    if tabuleiro_captura_azuis[i + 1][j] == CAPTURA_PEAO:
-                                        tabuleiro_captura_azuis[i + 1][j] = MOV_CAPTURA_PEAO
-
-                                    elif tabuleiro_captura_azuis[i + 1][j] == MOV_CAPTURA_PEAO:
-                                        pass
-                                    else:
-                                        tabuleiro_captura_azuis[i + 1][j] = MOVIMENTO_PEAO
-
-                            if tabuleiro_captura_azuis[i + 2][j] != AREA_XEQUE:
-                                if tabuleiro_cores[i + 2][j] == ESPACO:
-                                    if tabuleiro_captura_azuis[i + 2][j] == CAPTURA_PEAO:
-                                        tabuleiro_captura_azuis[i + 2][j] = MOV_CAPTURA_PEAO
-
-                                    elif tabuleiro_captura_azuis[i + 2][j] == MOV_CAPTURA_PEAO:
-                                        pass
-                                    else:
-                                        tabuleiro_captura_azuis[i + 2][j] = MOVIMENTO_PEAO
-                        else:
-                            if tabuleiro_captura_azuis[i + 1][j] != AREA_XEQUE:
-                                if tabuleiro_cores[i + 1][j] == ESPACO:
-                                    if tabuleiro_captura_azuis[i + 1][j] == CAPTURA_PEAO:
-                                        tabuleiro_captura_azuis[i + 1][j] = MOV_CAPTURA_PEAO
-
-                                    elif tabuleiro_captura_azuis[i + 1][j] == MOV_CAPTURA_PEAO:
-                                        pass
-                                    else:
-                                        tabuleiro_captura_azuis[i + 1][j] = MOVIMENTO_PEAO
-
-                        if i + 1 < TAMANHO_TABULEIRO and j - 1 >= 0:
-                            if tabuleiro_captura_azuis[i + 1][j - 1] != AREA_XEQUE:
-                                if tabuleiro_cores[i + 1][j - 1] == cor or tabuleiro_cores[i + 1][j - 1] == ESPACO:
-                                    if tabuleiro_captura_azuis[i + 1][j - 1] == MOVIMENTO_PEAO:
-                                        tabuleiro_captura_azuis[i + 1][j - 1] = MOV_CAPTURA_PEAO
-
-                                    elif tabuleiro_captura_azuis[i + 1][j - 1] == MOV_CAPTURA_PEAO:
-                                        pass
-                                    elif tabuleiro_captura_azuis[i + 1][j - 1] == PEÇA_XEQUE:
-                                        tabuleiro_captura_azuis[i + 1][j - 1] = AREA_XEQUE
-
-                                    else:
-                                        tabuleiro_captura_azuis[i + 1][j - 1] = CAPTURA_PEAO
-
-                                elif tabuleiro_cores[i + 1][j - 1] == VERDES:
-                                    if tabuleiro[i + 1][j - 1] == REI_V:
-                                        tabuleiro_captura_azuis[i][j] = PEÇA_XEQUE
-                                    else:
-                                        tabuleiro_captura_azuis[i + 1][j - 1] = CAPTURA
+                    verificar_captura_peao(i, j, cor)
 
                 elif tabuleiro[i][j] == CAVALO_V or tabuleiro[i][j] == CAVALO_A:
-                    for l in range(-2, 3, 1):
-                        if l != 0:
-                            for c in range(-2, 3, 1):
-                                if c != 0 and l + c != 0 and l != c:
-                                    if (j+c >= 0 and j+c < TAMANHO_TABULEIRO) and (i+l >= 0 and i+l < TAMANHO_TABULEIRO):
-                                        if (cor == VERDES and tabuleiro_captura_verdes[i + l][j + c] != 2) or (
-                                                cor == AZUIS and tabuleiro_captura_azuis[i + l][j + c] != 2):
-                                            if tabuleiro_cores[i+l][j+c] == ESPACO:
-                                                if cor == VERDES:
-                                                    tabuleiro_captura_verdes[i+l][j+c] = CAPTURA
-                                                else:
-                                                    tabuleiro_captura_azuis[i + l][j + c] = CAPTURA
-
-                                            elif tabuleiro_cores[i+l][j+c] == cor:
-                                                if cor == VERDES and tabuleiro[i + l][j + c] != REI_V:
-                                                    if tabuleiro_captura_verdes[i+l][j+c] == PEÇA_XEQUE:
-                                                        tabuleiro_captura_verdes[i + l][j + c] = AREA_XEQUE
-                                                    else:
-                                                        tabuleiro_captura_verdes[i+l][j+c] = CAPTURA
-                                                else:
-                                                    if cor == AZUIS and tabuleiro[i + l][j + c] != REI_A:
-                                                        if tabuleiro_captura_azuis[i + l][j + c] == PEÇA_XEQUE:
-                                                            tabuleiro_captura_azuis[i + l][j + c] = AREA_XEQUE
-                                                        else:
-                                                            tabuleiro_captura_azuis[i + l][j + c] = CAPTURA
-                                            elif (cor == VERDES and tabuleiro[i + l][j + c] == REI_A) or \
-                                                    (cor == AZUIS and tabuleiro[i + l][j + c] == REI_V):
-                                                if cor == VERDES:
-                                                    tabuleiro_captura_verdes[i][j] = AREA_XEQUE
-                                                    tabuleiro_captura_verdes[i + l][j + c] = AREA_XEQUE
-                                                else:
-                                                    tabuleiro_captura_azuis[i][j] = AREA_XEQUE
-                                                    tabuleiro_captura_azuis[i + l][j + c] = AREA_XEQUE
+                    verificar_captura_cavalo(i, j, cor)
 
                 elif tabuleiro[i][j] == TORRE_V or tabuleiro[i][j] == TORRE_A:
-                    verificar_horizontal_vertical()
+                    verificar_captura_horizontal_vertical(i, j, cor)
 
                 elif tabuleiro[i][j] == BISPO_V or tabuleiro[i][j] == BISPO_A:
-                    verificar_diagonal()
+                    verificar_captura_diagonal(i, j, cor)
 
                 elif tabuleiro[i][j] == RAINHA_V or tabuleiro[i][j] == RAINHA_A:
-                    verificar_horizontal_vertical()
-                    verificar_diagonal()
+                    verificar_captura_horizontal_vertical(i, j, cor)
+                    verificar_captura_diagonal(i, j, cor)
 
                 elif tabuleiro[i][j] == REI_V or tabuleiro[i][j] == REI_A:
-                    for l in range(-1, 2):
-                        for c in range(-1, 2):
-                            if not (l == 0 and l == c):
-                                if (i + l >= 0 and i+l < TAMANHO_TABULEIRO) and (j + c >= 0 and j+c < TAMANHO_TABULEIRO):
-                                    if tabuleiro_cores[i + l][j + c] == ESPACO or tabuleiro_cores[i + l][j + c] == cor:
-                                        if cor == VERDES:
-                                            if tabuleiro_captura_verdes[i + l][j + c] == PEÇA_XEQUE:
-                                                tabuleiro_captura_verdes[i + l][j + c] = AREA_XEQUE
-                                            else:
-                                                tabuleiro_captura_verdes[i + l][j + c] = 1
-                                        else:
-                                            if tabuleiro_captura_azuis[i + l][j + c] == PEÇA_XEQUE:
-                                                tabuleiro_captura_azuis[i + l][j + c] = AREA_XEQUE
-                                            else:
-                                                tabuleiro_captura_azuis[i + l][j + c] = 1
+                    verificar_captura_rei()
 
 
 def jogar():
@@ -919,7 +984,7 @@ xeque = False
 
 montando_tabuleiro()
 criar_referencia_cor()
-#imprimir_tutorial()
+imprimir_tutorial()
 
 while True:
 
