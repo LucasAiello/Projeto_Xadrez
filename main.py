@@ -742,7 +742,7 @@ def atualizar_referencia_captura(cor):
                     verificar_captura_diagonal(i, j, cor)
 
                 elif tabuleiro[i][j] == REI_V or tabuleiro[i][j] == REI_A:
-                    verificar_captura_rei()
+                    verificar_captura_rei(i, j, cor)
 
 
 def jogar():
